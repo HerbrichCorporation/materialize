@@ -1,29 +1,27 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Title</title>
-    <link href="/materialize/components/dom-if.html" rel="component">
-    <link href="/materialize/components/dom-input.html" rel="component">
-    <link href="/materialize/extensions/HTMLElement.html" rel="component">
-    <link href="/material/components/mat-input-container.html" rel="component">
-    <link href="/material/components/mat-button.html" rel="component">
-    <link href="/material/components/mat-option.html" rel="component">
+    <link href="/materialize/components/dom-if.html" rel="component" />
+    <link href="/materialize/components/dom-input.html" rel="component" />
+    <link href="/materialize/extensions/HTMLElement.html" rel="component" />
+    <link href="/material/components/mat-input-container.html" rel="component" />
+    <link href="/material/components/mat-button.html" rel="component" />
+    <link href="/material/components/mat-option.html" rel="component" />
+    <meta name="robots" content="noindex, follow" />
     <style>
         mat-select {
             display: block;
         }
 
-        mat-select div.overlay {
-            position: absolute;
-            top: 40px;
-            background-color: white;
-            width: 100%;
-            box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2),
-                        0 2px 2px 0 rgba(0, 0, 0, .14),
-                        0 1px 5px 0 rgba(0, 0, 0, .12);
-        }
-
+            mat-select div.overlay {
+                position: absolute;
+                top: 40px;
+                background-color: white;
+                width: 100%;
+                box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
+            }
     </style>
     <script>
 
@@ -60,7 +58,7 @@
                     event.stopPropagation();
                     this.value = this.defaultValue;
                     this.index = 0;
-                    this.items({index: this.value, limit: 1}, (data, size) => {
+                    this.items({ index: this.value, limit: 1 }, (data, size) => {
                         this.size = size;
                         this.querySelector("input").value = data[0].value;
                         this.output.get("click").fire();
@@ -70,7 +68,7 @@
                 up(event) {
                     event.stopPropagation();
                     this.index -= 5;
-                    this.items({index: this.index, limit: this.limit}, (data, size) => {
+                    this.items({ index: this.index, limit: this.limit }, (data, size) => {
                         this.size = size;
                         this.elements = data;
                     });
@@ -79,7 +77,7 @@
                 down(event) {
                     event.stopPropagation();
                     this.index += 5;
-                    this.items({index: this.index, limit: this.limit}, (data, size) => {
+                    this.items({ index: this.index, limit: this.limit }, (data, size) => {
                         this.size = size;
                         this.elements = data;
                     });
@@ -98,7 +96,7 @@
                 }
 
                 inputCallback() {
-                    this.items({index: this.index, limit: 5}, (data, size) => {
+                    this.items({ index: this.index, limit: 5 }, (data, size) => {
                         this.size = size;
                         this.elements = data;
                     });
@@ -106,7 +104,7 @@
 
                 initCallback() {
                     if (this.value) {
-                        this.items({index: this.value, limit: 1}, (data, size) => {
+                        this.items({ index: this.value, limit: 1 }, (data, size) => {
                             this.size = size;
                             this.querySelector("input").value = data[0].value;
                         });
@@ -119,7 +117,7 @@
 
         });
 
-        //# sourceURL=/material/component/mat-select.html
+            //# sourceURL=/material/component/mat-select.html
 
     </script>
 </head>
