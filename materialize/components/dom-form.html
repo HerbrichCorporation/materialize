@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLFormElement.html" rel="component">
+    <script>
+
+        define(() => {
+
+            class DomForm extends MaterializeHTMLFormElement {
+
+                constructor() {
+                    super();
+                }
+
+                get pristine() {
+                    let inputs = Array.from(this.querySelectorAll("input, select"));
+                    return inputs.every((input) => input.pristine);
+                }
+
+                set pristine(value) {
+                    if (value) {
+                        for (const element of this.elements) {
+                            element.value = element.defaultValue;
+                        }
+                    }
+                }
+
+                get dirty() {
+                    return !this.pristine;
+                }
+
+            }
+
+            customElements.define("dom-form", DomForm, {extends: 'form'});
+
+        });
+
+        //# sourceURL=/materialize/components/dom-form.html
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+
+
+

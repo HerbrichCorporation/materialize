@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLSelectElement.html" rel="component">
+    <script>
+
+        define(() => {
+
+            class DomSelect extends MaterializeHTMLSelectElement {
+
+                constructor() {
+                    super();
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    this.addListener("blur", () => {
+                        materialize.outputBinding(this);
+                    });
+
+                    this.addListener("change", () => {
+                        materialize.outputBinding(this);
+                        materialize.render(document);
+                    });
+
+                }
+
+                reset() {
+                    this.defaultSelected = "";
+                }
+
+                get dirty() {
+                    return ! this.pristine;
+                }
+
+                get pristine() {
+                    return this.defaultSelected === this.value;
+                }
+
+                get selected() {
+                    return this.value;
+                }
+
+                set selected(value) {
+                    if (! this.initialized) {
+                        this.initialized = true;
+                        this.defaultSelected = value;
+                    }
+                    this.value = value;
+                }
+
+            }
+
+
+            customElements.define("dom-select", DomSelect, {extends: "select"});
+
+
+        });
+        //# sourceURL=/materialize/components/dom-select.html
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+
+
+

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        define((template) => {
+
+            customServices = {};
+
+            let registry = new Map;
+
+            Object.assign(customServices, {
+                define(name, clazz) {
+                    registry.set(name, new clazz);
+                },
+
+                get(name) {
+                    return registry.get(name);
+                }
+            });
+        })
+
+
+        //# sourceURL=/materialize/services.html
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+

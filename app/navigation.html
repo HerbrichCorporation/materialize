@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+
+    <style>
+        app-navigation {
+            display: block;
+        }
+
+        h2.header {
+            margin-bottom: 0;
+        }
+    </style>
+    <script>
+
+        define((template) => {
+
+            class AppNavigation extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+                }
+
+            }
+
+            materialize.define({
+                href: '/app/navigation.html',
+                name: 'main',
+                element: 'app-navigation',
+                component: AppNavigation
+            })
+
+        });
+
+
+        //# sourceURL=/app/navigation.html
+
+    </script>
+</head>
+<body>
+<template root>
+    <div style="max-width: 600px; margin: auto">
+        <div style="padding: 1px;">
+            <h1 style="margin-left: 0">Content</h1>
+
+            <hr>
+
+            <a href="#/app/philosophy.html">
+                <h2 class="header">Philosophy</h2>
+                <span>About this Framework and how to use it. Best Practices and more.</span>
+            </a>
+
+            <a href="#/app/common/navigation.html">
+                <h2 class="header">Common</h2>
+                <span>All kinds of Common Elements. If, Repeat and Implicit Templating</span>
+            </a>
+
+            <a href="#/app/form/navigation.html">
+                <h2 class="header">Form</h2>
+                <span>All kinds of Form Elements. Checkbox, Select, Radio and Input</span>
+            </a>
+
+            <a href="#/app/table.html">
+            <h2 class="header">Table</h2>
+            <span>About Tables in HTML and how to use them.</span>
+            </a>
+
+            <h2 class="header">Navigation</h2>
+            <span>All kinds of Navigation Elements. Drawer, Menu and Router</span>
+        </div>
+    </div>
+</template>
+</body>
+</html>
+
+
+
+
+
+

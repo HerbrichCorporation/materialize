@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLInputElement.html" rel="component">
+    <style>
+
+        input[is=dom-input][type=text] {
+            width: 100%;
+            border: 0;
+        }
+
+        input[is=dom-input][type=password] {
+            width: 100%;
+            border: 0;
+        }
+
+        input[is=dom-input][type=date] {
+            width: 100%;
+            border: 0;
+        }
+
+        input[is=dom-input][type=datetime-local] {
+            width: 100%;
+            border: 0;
+        }
+
+        input[is=dom-input]:focus {
+            outline: 0;
+        }
+
+        /*
+            input[type=range] {
+                -webkit-appearance: none;
+                height: 2px;
+                background: var(--main-darkgrey-color);
+                outline: none;
+                opacity: 0.7;
+                -webkit-transition: .2s;
+                transition: opacity .2s;
+            }
+
+            input[type=range]:hover {
+                opacity: 1;
+            }
+
+            input[type=range]::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                width: 16px;
+                height: 16px;
+                border-radius: 50%;
+                border: 2px solid var(--main-darkgrey-color);
+                background: var(--main-background-color);
+                cursor: pointer;
+            }
+
+            input[type=range]::-moz-range-thumb {
+                width: 5px;
+                height: 25px;
+                background: var(--main-normal-color);
+                cursor: pointer;
+            }
+        */
+
+    </style>
+    <script>
+
+        define(() => {
+
+            class InputBinding extends MaterializeHTMLInputElement {
+
+                constructor() {
+                    super();
+
+                    this.initialized = false;
+                }
+
+                reset() {
+                    this.defaultValue = "";
+                    this.value = "";
+                }
+
+                get dirty() {
+                    return !this.pristine;
+                }
+
+                get pristine() {
+                    return this.defaultValue === this.value;
+                }
+
+                get value() {
+                    let value = super.value;
+                    return this.formatter(value);
+                }
+
+                set value(value) {
+                    super.value = value;
+
+                    if (!this.initialized) {
+                        this.initialized = true;
+                        this.defaultValue = value;
+                    }
+
+                    let promises = [];
+                    for (let validator of this.validators) {
+                        promises.push(validator.validate(this));
+                    }
+                    Promise.all(promises)
+                        .then(() => {
+                            super.value = value;
+                        })
+                        .catch((reason) => {
+                            super.value = value;
+                        })
+
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    this.addListener("blur", () => {
+                        materialize.outputBinding(this);
+                    });
+
+                    if (this.type === "date") {
+                        // No op
+                    } else {
+                        this.addListener("change", () => {
+                            materialize.outputBinding(this);
+                            materialize.render(document);
+                        });
+
+                        this.addListener("keydown", () => {
+                            materialize.outputBinding(this);
+                        });
+
+                        this.addListener("keyup", () => {
+                            materialize.outputBinding(this);
+                            materialize.render(document);
+                        });
+                    }
+
+
+                    this.validators = [{
+                        validate(element) {
+                            let executor = (resolve, reject) => {
+                                if (element.hasAttribute("empty")) {
+                                    let result = String(element.value).length > 0;
+
+                                    if (result) {
+                                        let index = element.errors.indexOf("empty");
+                                        element.errors.splice(index, 1);
+                                        resolve();
+                                    } else {
+                                        if (element.errors.indexOf("empty") === -1) {
+                                            element.errors.push("empty");
+                                            reject("empty")
+                                        }
+                                    }
+                                }
+
+                                return resolve();
+                            };
+
+                            return new Promise(executor)
+                        }
+                    }];
+
+                    this.formatter = (value) => {
+                        return value;
+                    };
+
+                    this.errors = [];
+
+                }
+
+                outputCallback() {
+                    this.value = this.formatter(this.value);
+                }
+
+            }
+
+
+            customElements.define("dom-input", InputBinding, {extends: "input"});
+
+
+        });
+        //# sourceURL=/materialize/components/dom-input.html
+
+    </script>
+</head>
+<body>
+</body>
+</html>
+
+

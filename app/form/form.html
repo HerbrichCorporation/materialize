@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <link href="/materialize/services/router.html" rel="component">
+    <link href="/materialize/services/htmlClient.html" rel="component">
+    <link href="/material/components/mat-panel.html" rel="component">
+    <link href="/material/components/mat-select.html" rel="component">
+    <link href="/material/components/mat-option.html" rel="component">
+    <link href="/material/components/mat-radio-container.html" rel="component">
+    <link href="/material/components/mat-select-container.html" rel="component">
+    <link href="/material/components/mat-tab.html" rel="component">
+    <link href="/material/components/mat-tabs.html" rel="component">
+    <link href="/material/components/mat-page.html" rel="component">
+    <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/materialize/components/dom-form.html" rel="component">
+    <link href="/materialize/components/dom-repeat.html" rel="component">
+    <link href="/materialize/components/dom-if.html" rel="component">
+    <script>
+
+        define((template) => {
+
+            class AppForm extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+
+                    this.page = 0;
+
+                    this.user = {
+                        firstName: 'Patrick',
+                        lastName: 'Bittner',
+                        birthday: '1980-04-01',
+                        password: 'asd'
+                    };
+                }
+            }
+
+            materialize.define({
+                href: '/app/form/form.html',
+                name: 'main',
+                element: 'app-form',
+                component: AppForm,
+                guard(activeRoute) {
+                    let htmlClient = customServices.get("htmlClient");
+                    return {
+                        root: htmlClient.get("service")
+                    };
+                }
+            })
+        });
+
+        //# sourceURL=/app/form/form.html
+
+    </script>
+</head>
+<body>
+<template root>
+    <div style="margin: auto; max-width: 600px;">
+        <form #form is="dom-form" style="padding: 1px;">
+            <h1 style="margin-left: 0">Form</h1>
+
+            <hr/>
+
+            <mat-tabs (select)="page = $event">
+                <mat-tab default [label]="'Example'"></mat-tab>
+                <mat-tab [label]="'Source'"></mat-tab>
+            </mat-tabs>
+
+            <mat-pages [page]="page">
+                <mat-page page="0">
+                    <div style="padding: 20px;">
+                        <mat-input-container [placeholder]="'First Name'">
+                            <input is="dom-input" type="text" name="firstName" ([value])="user.firstName">
+                        </mat-input-container>
+
+                        <mat-input-container [placeholder]="'Last Name'">
+                            <input is="dom-input" type="text" name="lastName" ([value])="user.lastName">
+                        </mat-input-container>
+
+                        <mat-input-container [placeholder]="'Birthday'">
+                            <input is="dom-input" type="date" name="birthday" ([value])="user.birthday">
+                        </mat-input-container>
+
+                        <mat-input-container [placeholder]="'Password'">
+                            <input is="dom-input" type="password" name="password" ([value])="user.password">
+                        </mat-input-container>
+
+                        <button is="mat-button" (click)="send()" type="button">Send</button>
+
+                        <template is="dom-if" predicate="form.dirty">
+                            <div>Dirty</div>
+                        </template>
+                    </div>
+                </mat-page>
+                <mat-page page="1">
+                    <div style="overflow: visible; width: 100%;">
+                        <div #example>
+                        </div>
+                    </div>
+                </mat-page>
+            </mat-pages>
+        </form>
+    </div>
+</template>
+</body>
+</html>
+
+
+
+
+
+

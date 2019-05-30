@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component" xmlns="http://java.sun.com/jsf/html">
+    <link href="/material/components/mat-button.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <link href="/materialize/services/router.html" rel="component">
+    <link href="/materialize/services/htmlClient.html" rel="component">
+    <link href="/material/components/mat-panel.html" rel="component">
+    <link href="/material/components/mat-input-container.html" rel="component">
+    <link href="/materialize/components/dom-input.html" rel="component">
+    <link href="/materialize/components/dom-form.html" rel="component">
+    <script>
+
+        define((template) => {
+
+            class AppUserControlLogin extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+
+                    this.user = {
+                        firstName: '',
+                        lastName: '',
+                        birthday: '',
+                        password: ''
+                    };
+                }
+
+                send() {
+                    let htmlClient = customServices.get("htmlClient");
+                    htmlClient.post("service/usercontrol/login/form", {body: this.user});
+                }
+
+            }
+
+            materialize.define({
+                path: "usercontrol/login",
+                href: '/app/usercontrol/login.html',
+                name: 'main',
+                element: 'app-usercontrol-login',
+                component: AppUserControlLogin,
+                guard(activeRoute) {
+                    let htmlClient = customServices.get("htmlClient");
+                    return {
+                        root: htmlClient.get("service")
+                    };
+                }
+            })
+        });
+        //# sourceURL=/app/usercontrol/login.html
+
+    </script>
+</head>
+<body>
+<template>
+    <mat-panel>
+        <form #form is="mat-form">
+            <h1>Sign In</h1>
+            <mat-input-container [placeholder]="'First Name'">
+                <input is="dom-input" type="text" name="firstName" ([value])="user.firstName">
+            </mat-input-container>
+
+            <mat-input-container [placeholder]="'Last Name'">
+                <input is="dom-input" type="text" name="lastName" ([value])="user.lastName">
+            </mat-input-container>
+
+            <mat-input-container [placeholder]="'Birthday'">
+                <input is="dom-input" type="date" name="birthday" ([value])="user.birthday">
+            </mat-input-container>
+
+            <mat-input-container [placeholder]="'Password'">
+                <input is="dom-input" type="password" name="password" ([value])="user.password">
+            </mat-input-container>
+
+            <button is="mat-button" (click)="send()" type="button">Send</button>
+        </form>
+
+        <template is="dom-if" predicate="form.dirty">
+            <span>Dirty</span>
+        </template>
+
+    </mat-panel>
+</template>
+</body>
+</html>
+
+
+

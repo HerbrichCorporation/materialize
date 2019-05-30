@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <script>
+
+        define(() => {
+
+            class MaterializeHTMLTemplateElement extends HTMLTemplateElement {
+
+                constructor() {
+                    super();
+                }
+
+                connectedCallback() {
+                    materialize.componentAttach(this);
+                }
+
+                disconnectedCallback() {
+                    materialize.componentDetach(this);
+                }
+
+            }
+
+            window.MaterializeHTMLTemplateElement = MaterializeHTMLTemplateElement;
+        });
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+

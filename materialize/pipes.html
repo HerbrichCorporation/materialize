@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        define((template) => {
+            customPipes = {};
+
+            let registry = new Map;
+
+            Object.assign(customPipes, {
+                define(name, func) {
+                    registry.set(name, func);
+                },
+
+                get(name) {
+                    return registry.get(name);
+                },
+
+                pipes() {
+                    return registry.keys();
+                }
+            });
+
+        })
+
+
+        //# sourceURL=/materialize/pipes.html
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+

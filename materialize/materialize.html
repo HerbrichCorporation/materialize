@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/pipes.html" rel="component">
+    <link href="/materialize/services.html" rel="component">
+    <link href="/materialize/directives.html" rel="component">
+    <link href="/materialize/services/router.html" rel="component">
+    <script>
+
+        define(() => {
+
+            window.materialize = {};
+            let parser = new DOMParser();
+
+            Object.assign(materialize, {
+
+                    render(root) {
+                        materialize.cycle(root, (element) => {
+                            materialize.inputBinding.call(element, element);
+                            return true;
+                        });
+                    },
+
+                    componentAttach(root) {
+                        materialize.cycle(root, (element) => {
+
+                            if (!element.processed) {
+
+                                let customElement;
+                                if (element.hasAttribute("is")) {
+                                    let is = element.getAttribute("is");
+                                    customElement = customElements.get(is);
+                                } else {
+                                    customElement = customElements.get(element.localName);
+                                }
+
+                                if (customElement && element !== root) {
+                                    return false;
+                                }
+
+                                element.listeners = new Map;
+
+                                element.output = new Map;
+
+                                element.processed = true;
+
+                                element.outputBinding = [];
+
+                                element.inputBinding = element.inputBinding || [];
+
+                                element.addListener = function (name, func) {
+                                    this.listeners.set(name, func);
+                                    this.addEventListener(name, func);
+                                };
+
+                                if (customElement) {
+                                    materialize.processInitializer(element, element.template);
+                                }
+
+                                materialize.processBuilder(element);
+
+                                materialize.processAttributes(element);
+
+                                return true;
+                            }
+
+                        });
+                    },
+
+                    componentDetach(root) {
+                        materialize.cycle(root, (element) => {
+
+                            if (element.listeners) {
+                                for (let entry of element.listeners.entries()) {
+                                    element.removeEventListener(entry[0], entry[1]);
+                                }
+                            }
+
+                            return true;
+
+                        });
+                    },
+
+                    cycle(element, callback) {
+                        if (callback(element)) {
+                            for (let child of element.children) {
+                                if (child.localName !== "code") {
+                                    this.cycle(child, callback);
+                                }
+                            }
+                        }
+                    },
+
+                    distinct(items, extractor) {
+                        let distinctArray = [];
+                        for (let item of items) {
+                            let extracted = extractor(item);
+                            let find = distinctArray.find((element) => extractor(element) === extracted);
+                            if (!find) {
+                                distinctArray.push(item);
+                            }
+                        }
+                        return distinctArray;
+                    },
+
+                    create(html) {
+                        return parser.parseFromString(html, "text/html").querySelector("body").firstChild
+                    },
+
+                    findRoot(element) {
+                        if (element == null) {
+                            return null;
+                        }
+                        if (element.isRoot) {
+                            return element;
+                        } else {
+                            return materialize.findRoot(element.parentElement);
+                        }
+                    },
+
+                    findContentElement(element) {
+                        if (element == null) {
+                            return null;
+                        }
+                        if (element.contentChildren) {
+                            return element;
+                        } else {
+                            return materialize.findContentElement(element.parentElement, name);
+                        }
+                    },
+
+                    findParent(element, clazz) {
+                        if (element.parentElement instanceof clazz) {
+                            return element.parentElement;
+                        } else {
+                            return materialize.findParent(element.parentElement, clazz);
+                        }
+                    },
+
+                    define(route) {
+                        customServices.get("router").define(route);
+                        customElements.define(route.element, route.component, route.options);
+                    },
+
+                    eventEmitter() {
+                        let listeners = [];
+                        return {
+                            fire($event) {
+                                for (let listener of listeners) {
+                                    listener($event);
+                                }
+                            },
+                            listeners() {
+                                return listeners;
+                            }
+                        }
+                    },
+
+                    debounce(func, wait, immediate) {
+                        let timeout;
+                        return function () {
+                            const context = this, args = arguments;
+                            const later = function () {
+                                timeout = null;
+                                if (!immediate) func.apply(context, args);
+                            };
+                            const callNow = immediate && !timeout;
+                            clearTimeout(timeout);
+                            timeout = setTimeout(later, wait);
+                            if (callNow) func.apply(context, args);
+                        };
+                    },
+
+                    processInitializer(element, viewTemplate) {
+
+                        if (viewTemplate && viewTemplate.hasAttribute("root")) {
+                            element.isRoot = true;
+                        }
+
+                        if (element.localName === "template") {
+
+                            // No op
+
+                        } else {
+
+                            if (viewTemplate) {
+                                let contentChildren = document.createElement("template");
+                                contentChildren.setAttribute("contentchildren", "");
+
+                                for (let node of Array.from(element.childNodes)) {
+                                    contentChildren.content.appendChild(node);
+                                }
+
+                                element.contentChildren = contentChildren;
+                                element.viewChildren = viewTemplate;
+
+                                for (let viewChild of Array.from(viewTemplate.content.children)) {
+                                    element.appendChild(viewChild.cloneNode(true));
+                                }
+
+                            }
+                        }
+                    },
+
+                    processBuilder(element) {
+
+                        if (element.hasAttribute("implicitselect")) {
+                            let select = element.getAttribute("implicitselect");
+
+                            let contentElement = materialize.findContentElement(element);
+                            let contentTemplate = contentElement.contentChildren;
+                            for (let child of Array.from(contentTemplate.content.childNodes)) {
+                                if (child instanceof HTMLElement && child.localName === select) {
+                                    let cloneNode = child.cloneNode(true);
+                                    element.appendChild(cloneNode);
+                                    if (element.hasAttribute("implicitvalue")) {
+
+                                        Object.assign(cloneNode, {
+                                            properties: {
+                                                let: {
+                                                    value: child.getAttribute("let"),
+                                                    source: element.getAttribute("implicitvalue"),
+                                                }
+                                            },
+
+                                            inputBinding: [function () {
+                                                if (this.properties.let.source) {
+                                                    let context = materialize.context(this, this.properties.let.source);
+                                                    this[this.properties.let.value] = eval(context);
+                                                }
+                                            }]
+                                        });
+                                    }
+                                }
+                            }
+                        }
+
+                        if (element.hasAttribute("name")) {
+                            let name = element.getAttribute("name");
+
+                            let contentElement = materialize.findContentElement(element);
+                            let contentTemplate = contentElement.contentChildren;
+                            for (let child of Array.from(contentTemplate.content.childNodes)) {
+                                if (child instanceof HTMLElement && child.getAttribute("slot") === name) {
+                                    element.insertAdjacentElement("afterend", child.cloneNode(true));
+                                }
+                            }
+                        }
+
+                        if (element.hasAttribute("select")) {
+                            let select = element.getAttribute("select");
+                            let contentElement = materialize.findContentElement(element);
+                            let contentTemplate = contentElement.contentChildren;
+                            for (let child of Array.from(contentTemplate.content.childNodes)) {
+                                if (child.localName === select) {
+                                    element.appendChild(child);
+                                    if (child instanceof HTMLElement) {
+                                        materialize.inputBinding(child);
+                                    }
+                                }
+                            }
+                        }
+
+                        if (element.hasAttribute("content")) {
+                            let contentElement = materialize.findContentElement(element);
+                            let contentTemplate = contentElement.contentChildren;
+                            for (let child of Array.from(contentTemplate.content.childNodes)) {
+                                element.appendChild(child);
+                                if (child instanceof HTMLElement) {
+                                    materialize.inputBinding(child);
+                                }
+                            }
+                        }
+
+                    },
+
+                    processAttributes(element) {
+
+                        for (let attribute of element.attributes) {
+
+                            if (Array.from(customDirectives.directives()).indexOf(attribute.name) > -1) {
+                                let directiveClass = customDirectives.get(attribute.name);
+                                let directive = new directiveClass(element);
+                                element.parentElement.directives = element.parentElement.directives || [];
+                                element.parentElement.directives.push(directive);
+                            }
+
+                            let variableRegex = /\#(\w+)/;
+                            let variableResult = variableRegex.exec(attribute.name);
+                            if (variableResult) {
+                                let root = materialize.findRoot(element);
+                                root[variableResult[1]] = element;
+                            }
+
+                            let inputRegex = /\[(\w+)\]/;
+                            let inputResult = inputRegex.exec(attribute.name);
+                            if (inputResult) {
+                                if (element.inputBinding) {
+                                    element.inputBinding.push(
+                                        function () {
+                                            let context = materialize.context(this, attribute.value);
+                                            this[inputResult[1]] = eval(context);
+                                        }
+                                    )
+                                }
+                            }
+
+                            let twoWayRegex = /^\(\[(\w+)\]\)$/;
+                            let twoWayResult = twoWayRegex.exec(attribute.name);
+                            if (twoWayResult) {
+                                if (element.outputBinding) {
+                                    element.outputBinding.push(
+                                        function () {
+                                            let inputValue = this[twoWayResult[1]];
+                                            let context = materialize.context(this, attribute.value + " = " + JSON.stringify(inputValue).replace(/"/g, "'"));
+                                            eval(context);
+                                        }
+                                    )
+                                }
+                            }
+
+                            let eventRegex = /^\(([\w]+)\)$/;
+                            let eventResult = eventRegex.exec(attribute.name);
+                            if (eventResult) {
+                                let eventEmitter = element.output.get(eventResult[1]);
+                                if (!eventEmitter) {
+                                    eventEmitter = materialize.eventEmitter();
+                                    element.output.set(eventResult[1], eventEmitter);
+                                }
+
+                                let eventHandler = ($event) => {
+                                    function internal() {
+                                        let context = materialize.context(element, attribute.value);
+                                        eval(context);
+                                        materialize.render(document);
+                                    }
+
+                                    internal.call(element);
+                                };
+
+                                eventEmitter.listeners().push(eventHandler);
+                                element.addListener(eventResult[1], eventHandler);
+                            }
+
+
+                        }
+
+                    },
+
+                    inputBinding(element) {
+
+                        if (element.directives) {
+                            for (let directive of element.directives) {
+                                directive.inputCallback();
+                            }
+                        }
+
+                        if (element.inputBinding) {
+                            for (let func of element.inputBinding) {
+                                func.call(element);
+                            }
+                        }
+
+                        if (element.initCallback && !element.initCallbackCalled) {
+                            element.initCallback.call(element);
+                            element.initCallbackCalled = true;
+                        }
+
+                        if (element.childNodes) {
+                            for (let node of element.childNodes) {
+                                if (node.nodeType === 3) {
+                                    if (!node.originalData) {
+                                        node.originalData = node.data;
+                                    }
+                                    let matchEval = node.originalData.match(/\{\{[^\}]+\}\}/g);
+
+                                    if (matchEval && matchEval.length > 0) {
+                                        let context = materialize.interpolationContext(element, node.originalData);
+
+                                        function internal() {
+                                            node.data = eval(context);
+                                        }
+
+                                        internal.call(element);
+                                    }
+
+                                }
+                            }
+                        }
+
+
+                        if (element.inputCallback) {
+                            element.inputCallback();
+                        }
+
+
+                    },
+
+                    outputBinding(element) {
+
+                        if (element.outputBinding) {
+                            for (let func of element.outputBinding) {
+                                func.call(element);
+                            }
+                        }
+
+                        if (element.outputCallback) {
+                            element.outputCallback();
+                        }
+
+                    },
+
+                    findInterpolation(expression) {
+                        if (expression === "") {
+                            return [];
+                        }
+
+                        if (expression.startsWith("'") && expression.endsWith("'")) {
+                            return [];
+                        }
+
+                        let variableRegExp = /\$\{([^\}]+)\}/;
+                        let variable = variableRegExp.exec(expression);
+
+                        if (variable) {
+                            let split = expression.slice(variable.index + variable[1].length, expression.length);
+
+                            if (split === expression) {
+                                return materialize.findVariables(expression)
+                            }
+
+                            return materialize.findVariables(variable[1]).concat(materialize.findInterpolation(split));
+                        }
+
+                        return [];
+                    },
+
+                    findVariables(expression) {
+                        if (expression === "") {
+                            return [];
+                        }
+
+                        if (expression.startsWith("'") && expression.endsWith("'")) {
+                            return [];
+                        }
+
+                        let literalRegExp = /(true)|(false)|\$(event)|([+-]?\d[\d\.,]+)|'(.*)'/;
+                        let literal = literalRegExp.exec(expression);
+
+                        let variableRegExp = /(\w[\w\d\.-]+)/;
+                        let variable = variableRegExp.exec(expression);
+
+                        if (literal && variable) {
+                            let split = expression.slice(variable.index + variable[1].length, expression.length);
+
+                            if (literal[1] === variable[1]) {
+                                return materialize.findVariables(split);
+                            }
+                            if (literal[2] === variable[1]) {
+                                return materialize.findVariables(split);
+                            }
+                            if (literal[3] === variable[1]) {
+                                return materialize.findVariables(split);
+                            }
+                            if (literal[4] === variable[1]) {
+                                return materialize.findVariables(split);
+                            }
+                            if (literal[5] === variable[1]) {
+                                return materialize.findVariables(split);
+                            }
+                        }
+
+                        if (variable) {
+                            let split = expression.slice(variable.index + variable[1].length, expression.length);
+
+                            if (split === expression) {
+                                return [expression]
+                            }
+
+                            return [variable[1]].concat(materialize.findVariables(split));
+                        }
+
+                        return [];
+                    },
+
+                    searchDeep(element, variable, level) {
+
+                        let propertyNames = Object
+                            .getOwnPropertyNames(element)
+                            .concat(Object.getOwnPropertyNames(Object.getPrototypeOf(element)));
+
+                        let propertyName = propertyNames.find((propertyName) => propertyName === variable.split(".")[0]);
+
+                        if (propertyName) {
+                            if (element[propertyName] instanceof Function) {
+                                let scope = "this";
+                                for (let i = 0; i < level; i++) {
+                                    scope += ".parentElement"
+                                }
+                                return "." + variable.split(".")[0] + ".bind(" + scope + ")";
+                            }
+                            return "." + variable.split(".")[0];
+                        }
+
+                        return ".parentElement" + materialize.searchDeep(element.parentElement, variable, ++level)
+                    },
+
+                    searchDeep2(element, variable, level) {
+
+                        let propertyNames = Object
+                            .getOwnPropertyNames(element)
+                            .concat(Object.getOwnPropertyNames(Object.getPrototypeOf(element)));
+
+                        let propertyName = propertyNames.find((propertyName) => propertyName === variable.split(".")[0]);
+
+                        if (propertyName) {
+                            if (element[propertyName] instanceof Function) {
+                                let scope = "this";
+                                for (let i = 0; i < level; i++) {
+                                    scope += ".parentElement"
+                                }
+                                return "." + variable + ".bind(" + scope + ")";
+                            }
+                            return "." + variable;
+                        }
+
+                        return ".parentElement" + materialize.searchDeep2(element.parentElement, variable, ++level)
+                    },
+
+
+                    interpolationContext(element, expression) {
+                        let interpolationRegExp = /\{\{([^\}]+)\}\}/g;
+
+                        let newExpression = expression.replace(interpolationRegExp, (match, p1) => "${" + p1 + "}");
+
+                        let variables = materialize.distinct(materialize.findInterpolation(newExpression), (item) => item)
+                            .map((variable) => "let " + variable.split(".")[0] + " = this" + materialize.searchDeep(element, variable, 0) + ";")
+                            .join("\n");
+
+                        return variables + "\n" + "`" + newExpression + "`;";
+                    },
+
+                    context(element, expression) {
+                        let literal = /^('.*')$/;
+                        let literalResult = literal.exec(expression);
+                        if (literalResult) {
+                            return literalResult[1]
+                        }
+
+                        let functionCall = /(\w[\w\d\.\+\-]+)\(([\w\d\.\+\-\s,\$]+)?\)/;
+                        let functionCallResult = functionCall.exec(expression);
+                        if (functionCallResult) {
+                            let parameters;
+                            if (functionCallResult[2]) {
+                                parameters = functionCallResult[2].split(",").map((param) => {
+                                    let paramTrimmed = param.trim();
+                                    if (paramTrimmed === "$event" || paramTrimmed === "true" || paramTrimmed === "false") {
+                                        return paramTrimmed;
+                                    }
+                                    return "this" + materialize.searchDeep2(element, paramTrimmed, 0)
+                                }).join(",");
+                            } else {
+                                parameters = "";
+                            }
+                            return "this.parentElement" + materialize.searchDeep2(element.parentElement, functionCallResult[1], 1) + "(" + parameters + ")"
+                        }
+
+                        let variableSet = /(\w[\w\d\.\+\-]+)\s*=\s*([\w\d\.\+\-'\$]+)/;
+                        let variableSetResult = variableSet.exec(expression);
+                        if (variableSetResult) {
+                            let partialResult = "this.parentElement" + materialize.searchDeep2(element.parentElement, variableSetResult[1], 1) + "=";
+                            let paramTrimmed = variableSetResult[2].trim();
+                            if (paramTrimmed === "$event" || paramTrimmed === "true" || paramTrimmed === "false"
+                                || (paramTrimmed.startsWith("'") && paramTrimmed.endsWith("'"))) {
+                                return partialResult + paramTrimmed;
+                            }
+
+                            return partialResult + materialize.searchDeep2(element, paramTrimmed, 0);
+                        }
+
+                        let variableRead = /(\w[\w\d\.\+\-]+)/;
+                        let variableReadResult = variableRead.exec(expression);
+                        if (variableReadResult) {
+                            return "this.parentElement" + materialize.searchDeep2(element.parentElement, variableReadResult[1], 1);
+                        }
+                    }
+
+                }
+            )
+
+
+        });
+
+        //# sourceURL=/materialize/materialize.html
+
+
+    </script>
+</head>
+<body>
+</body>
+</html>
+

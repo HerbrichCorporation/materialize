@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/pipes.html" rel="component">
+    <script>
+
+        define((template) => {
+
+            let transform = (value, arg) => {
+                let args = arg.split(':');
+                let path = args[0];
+                let regex = new RegExp(args[1]);
+
+                return value.filter((element) => {
+                    let string = String(eval("element." + path));
+                    return regex.exec(string);
+                });
+            };
+
+            customPipes.define("regex", transform);
+        });
+
+        //# sourceURL=/materialize/pipes/regex.html
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

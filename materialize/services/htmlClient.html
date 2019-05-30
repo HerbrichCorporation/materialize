@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<!DOCTYPE html>
+
+<link href="/materialize/services.html" rel="component">
+
+<script>
+
+    define(() => {
+
+        class HTMLClient {
+
+                action(method, url, options) {
+
+                    let request = new XMLHttpRequest;
+
+                    request.open(method, url);
+                    request.setRequestHeader("content-type", "application/json");
+
+                    let executor = (resolve, reject) => {
+                        request.addEventListener("loadend", (event) => {
+                            let status = event.target.status;
+
+                            if (status === 200) {
+                                let response = JSON.parse(event.target.responseText);
+                                resolve(response)
+                            } else {
+                                reject(status);
+                            }
+
+                        });
+                    };
+
+                    let promise = new Promise(executor);
+
+                    if (options && options.body) {
+                        request.send(JSON.stringify(options.body));
+                    } else {
+                        request.send();
+                    }
+
+                    return promise;
+                }
+
+                get(url, options) {
+                    return this.action("GET", url, options)
+                }
+
+                put(url, options) {
+                    return this.action("PUT", url, options)
+                }
+
+                delete(url, options) {
+                    return this.action("DELETE", url, options)
+                }
+
+                post(url, options) {
+                    return this.action("POST", url, options)
+                }
+
+                options(url, options) {
+                    return this.action("OPTIONS", url, options)
+                }
+
+
+            }
+
+            customServices.define("htmlClient", HTMLClient);
+        });
+
+    //# sourceURL=/materialize/services/htmlClient.html
+
+</script>

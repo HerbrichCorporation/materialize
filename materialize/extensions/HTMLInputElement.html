@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <script>
+
+        define(() => {
+
+            class MaterializeHTMLInputElement extends HTMLInputElement {
+
+                constructor() {
+                    super();
+                }
+
+                connectedCallback() {
+                    materialize.componentAttach(this);
+                }
+
+                disconnectedCallback() {
+                    materialize.componentDetach(this);
+                }
+
+            }
+
+            window.MaterializeHTMLInputElement = MaterializeHTMLInputElement;
+        });
+
+        //# sourceURL=/materialize/extensions/HTMLInputElement.html
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+
+

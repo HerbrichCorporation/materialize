@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLInputElement.html" rel="component">
+    <style>
+
+        input[type=checkbox] {
+            -webkit-appearance: none;
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Material Icons', fantasy;
+            font-size: large;
+            margin: 0;
+            outline: 0;
+        }
+
+        input[type=checkbox]::before {
+            content: "check_box_outline_blank";
+            color: var(--main-darkgrey-color);
+        }
+
+        input[type=checkbox]:checked::before {
+            content: "check_box";
+            color: var(--main-normal-color);
+        }
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class DomCheckbox extends MaterializeHTMLInputElement {
+
+                constructor() {
+                    super();
+
+                    this.initialized = false;
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    this.addListener("blur", () => {
+                        materialize.outputBinding(this);
+                    });
+
+                    this.addListener("change", () => {
+                        materialize.outputBinding(this);
+                        materialize.render(document);
+                    });
+
+                }
+
+                reset() {
+                    this.defaultSelected = "";
+                }
+
+                get dirty() {
+                    return ! this.pristine;
+                }
+
+                get pristine() {
+                    return this.defaultSelected === this.selected;
+                }
+
+                get selected() {
+                    if (this.checked) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+
+                set selected(value) {
+                    if (! this.initialized) {
+                        this.initialized = true;
+                        this.defaultSelected = value;
+                    }
+                    this.checked = value;
+                }
+
+            }
+
+
+            customElements.define("dom-checkbox", DomCheckbox, {extends: "input"});
+
+
+        });
+        //# sourceURL=/materialize/components/dom-checkbox.html
+
+    </script>
+</head>
+<body>
+</body>
+</html>
+
+
+

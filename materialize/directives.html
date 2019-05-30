@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+
+        define((template) => {
+
+            customDirectives = {};
+
+            let registry = new Map;
+
+            Object.assign(customDirectives, {
+                define(name, clazz) {
+                    registry.set(name, clazz);
+                },
+
+                get(name) {
+                    return registry.get(name);
+                },
+
+                directives() {
+                    return registry.keys();
+                }
+            });
+
+        })
+
+        //# sourceURL=/materialize/directives.html
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+

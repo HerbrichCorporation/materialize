@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLInputElement.html" rel="component">
+    <style>
+
+        input[type=radio] {
+            -webkit-appearance: none;
+            -webkit-font-smoothing: antialiased;
+            font-family: 'Material Icons', fantasy;
+            font-size: large;
+            margin: 0;
+            display: inline;
+            outline: 0;
+        }
+
+        input[type=radio]::before {
+            content: "radio_button_unchecked";
+            color: var(--main-darkgrey-color);
+        }
+
+        input[type=radio]:checked::before {
+            content: "radio_button_checked";
+            color: var(--main-normal-color);
+        }
+
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class DomRadio extends MaterializeHTMLInputElement {
+
+                constructor() {
+                    super();
+
+                    this.init = false;
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    this.addListener("blur", () => {
+                        materialize.outputBinding(this);
+                    });
+
+                    this.addListener("change", () => {
+                        materialize.outputBinding(this);
+                        materialize.render(document);
+                    });
+
+                }
+
+                reset() {
+                    this.defaultSelected = "";
+                }
+
+                get initialized() {
+                    return this.init;
+                }
+
+                set initialized(value) {
+                    this.init = value;
+                }
+
+                get dirty() {
+                    return !this.pristine;
+                }
+
+                get pristine() {
+                    return this.defaultSelected === this.selected;
+                }
+
+                get selected() {
+                    for (let element of this.form.elements[this.name]) {
+                        if (element.checked) {
+                            return element.value;
+                        }
+                    }
+                }
+
+                set selected(value) {
+                    let checked = value === this.value;
+                    if (checked && !this.initialized) {
+                        let collection = this.form.elements[this.name];
+                        if (collection instanceof HTMLInputElement) {
+                            collection.defaultSelected = value;
+                            collection.initialized = true;
+                        } else {
+                            for (let element of collection) {
+                                element.defaultSelected = value;
+                                element.initialized = true;
+                            }
+                        }
+                    }
+                    this.checked = checked;
+                }
+
+            }
+
+
+            customElements.define("dom-radio", DomRadio, {extends: "input"});
+
+
+        });
+
+        //# sourceURL=/materialize/components/dom-radio.html
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+
+
+

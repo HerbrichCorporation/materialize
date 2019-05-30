@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/services.html" rel="component">
+    <link href="/materialize/pipes/regex.html" rel="component">
+    <link href="/materialize/pipes/json.html" rel="component">
+
+    <link href="/material/components/mat-toolbar.html" rel="component">
+    <link href="/material/components/mat-drawer-container.html" rel="component">
+    <link href="/material/components/mat-drawer-content.html" rel="component">
+    <link href="/material/components/mat-drawer.html" rel="component">
+    <link href="/material/components/mat-input-container.html" rel="component">
+    <link href="/material/components/mat-select.html" rel="component">
+    <link href="/material/components/mat-header.html" rel="component">
+    <link href="/material/components/mat-buttons.html" rel="component">
+
+    <link href="/materialize/components/dom-router.html" rel="component">
+    <link href="/materialize/components/dom-template.html" rel="component">
+    <link href="/materialize/components/dom-input.html" rel="component">
+    <link href="/materialize/components/dom-repeat.html" rel="component">
+    <link href="/materialize/components/dom-if.html" rel="component">
+
+    <link href="/materialize/directives/dom-style.html" rel="component">
+    <link href="/example.html" rel="component">
+
+    <style>
+
+        h1 {
+            margin: 20px;
+        }
+
+        html {
+            --main-font-color: #5d5d5d;
+            --main-normal-color: #3f51b5;
+            --main-error-color: #ff463f;
+            --main-grey-color: lightgrey;
+            --main-darkgrey-color: grey;
+            --main-background-color: white;
+        }
+
+        body {
+            color: var(--main-font-color);
+            font-family: Helvetica, serif;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: inherit;
+        }
+
+        .icon {
+            font-family: 'Material Icons', fantasy;
+            font-size: large;
+            border: 0;
+            cursor: pointer;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class App extends MaterializeHTMLElement {
+                constructor() {
+                    super(template);
+
+                    this.open = false;
+
+                    let pipes = customPipes.pipes();
+
+                    for (const pipe of pipes) {
+                        this[pipe] = customPipes.get(pipe);
+                    }
+
+                    var media = window.matchMedia("(max-width: 600px)");
+                    media.addListener(() => {
+                        this.open = true;
+                        materialize.render(this);
+                    });
+
+                    var media2 = window.matchMedia("(min-width: 599px)");
+                    media2.addListener(() => {
+                        this.open = false;
+                        materialize.render(this);
+                    });
+
+
+                }
+
+                navBar() {
+                    this.open = !this.open;
+                }
+
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    materialize.inputBinding(this);
+                }
+
+
+            }
+
+            customElements.define("meld-app", App);
+
+        });
+
+        //# sourceURL=/app.html
+
+    </script>
+
+
+</head>
+<body>
+<template>
+
+    <mat-toolbar>
+        <mat-header style="color: white;">
+            <a class="icon" href="#/app/navigation.html"
+                    style="display:inline; color: white; background-color : var(--main-normal-color);margin-right: 12px;">
+                menu
+            </a>
+            Materialize
+        </mat-header>
+        <mat-buttons style="color: white;">
+            <button is="mat-button" icon="large" style="color: white; background-color : var(--main-normal-color)"
+                    (click)="navBar()">lock
+            </button>
+        </mat-buttons>
+    </mat-toolbar>
+
+    <dom-router name="main"></dom-router>
+
+</template>
+</body>
+</html>
+
+
+
+
+
+

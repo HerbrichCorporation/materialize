@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <link href="/material/components/mat-panel.html" rel="component">
+    <link href="/material/components/mat-checkbox-container.html" rel="component">
+    <link href="/material/components/mat-select-container.html" rel="component">
+    <link href="/material/components/mat-tabs.html" rel="component">
+    <link href="/material/components/mat-tab.html" rel="component">
+    <link href="/material/components/mat-page.html" rel="component">
+    <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/materialize/components/dom-form.html" rel="component">
+    <link href="/materialize/components/dom-input.html" rel="component">
+    <link href="/materialize/components/dom-checkbox.html" rel="component">
+    <link href="/app/common/example.html" rel="component">
+    <style>
+        app-common-implicit {
+            display: block;
+        }
+    </style>
+    <script>
+
+        define((template) => {
+
+            class AppCommonImplicit extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+
+                    this.selected = false;
+                    this.page = 0;
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    let code =
+                        `<app-common-example>
+    <div let="material">
+        <div>
+            <span>{{material.position}}</span>
+            <span>{{material.name}}</span>
+            <span>{{material.weight}}</span>
+            <span>{{material.symbol}}</span>
+            <br/>
+        </div>
+    </div>
+</app-common-example>
+`;
+
+                    let preElement = document.createElement("pre");
+                    preElement.className = "language-html";
+
+                    let codeElement = document.createElement("code");
+                    codeElement.className = "language-html";
+                    codeElement.innerHTML = Prism.highlight(code, Prism.languages.html, 'html');
+                    preElement.appendChild(codeElement);
+
+                    this.example.appendChild(preElement);
+
+                }
+
+            }
+
+            materialize.define({
+                href: '/app/common/implicit.html',
+                name: 'main',
+                element: 'app-common-implicit',
+                component: AppCommonImplicit
+            })
+        });
+
+        //# sourceURL=/app/common/implicit.html
+
+    </script>
+</head>
+<body>
+<template root>
+    <div style="max-width: 600px; margin: auto">
+        <form #form is="dom-form" style="padding: 1px;">
+            <h1 style="margin-left: 0;">Implicit</h1>
+            <hr>
+
+            <h2>Introduction</h2>
+            <p>
+                A Implicit Templating for HTML
+            </p>
+
+            <h2>DOM-API</h2>
+            <table style="width: 100%">
+                <tr>
+                    <td>implicitselect</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>implicitvalue</td>
+                    <td>Attribute</td>
+                </tr>
+                <tr>
+                    <td>let</td>
+                    <td>Attribute</td>
+                </tr>
+            </table>
+
+            <mat-tabs (select)="page = $event">
+                <mat-tab default [label]="'Example'"></mat-tab>
+                <mat-tab [label]="'Source'"></mat-tab>
+            </mat-tabs>
+
+            <mat-pages [page]="page">
+                <mat-page page="0">
+                    <div style="margin: 20px;">
+                        <app-common-example>
+                            <div let="material2">
+                                <div>
+                                    <span>{{material2.position}}</span>
+                                    <span>{{material2.name}}</span>
+                                    <span>{{material2.weight}}</span>
+                                    <span>{{material2.symbol}}</span>
+                                    <br/>
+                                </div>
+                            </div>
+                        </app-common-example>
+                    </div>
+                </mat-page>
+                <mat-page page="1">
+                    <div style="overflow: visible; width: 100%;">
+                        <div #example>
+                        </div>
+                    </div>
+                </mat-page>
+            </mat-pages>
+        </form>
+    </div>
+</template>
+</body>
+</html>
+
+
+
+
+
+

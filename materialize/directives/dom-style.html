@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        define(() => {
+
+            class DomStyle {
+                constructor(element) {
+                    this.element = element;
+
+                    Object.assign(this, {
+                        inputCallback: () => {
+                            let attribute = this.element.getAttribute("dom-style");
+                            let context = materialize.context(this.element, attribute);
+                            let classModifier;
+
+                            function internal() {
+                                classModifier = eval(context);
+                            }
+
+                            internal.call(this.element);
+                            if (classModifier) {
+                                for (let clazz of classModifier.add) {
+                                    this.element.classList.add(clazz);
+                                }
+                                for (let clazz of classModifier.delete) {
+                                    this.element.classList.remove(clazz);
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+
+            customDirectives.define("dom-style", DomStyle);
+
+        })
+
+        //# sourceURL=/materialize/directives/dom-style.html
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+

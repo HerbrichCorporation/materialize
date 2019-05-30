@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+
+    <style>
+        app-common-navigation {
+            display: block;
+        }
+
+        h2.header {
+            margin-bottom: 0;
+        }
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class AppCommonNavigation extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+                }
+
+            }
+
+            materialize.define({
+                href: '/app/common/navigation.html',
+                name: 'main',
+                element: 'app-common-navigation',
+                component: AppCommonNavigation
+            })
+
+        });
+
+
+        //# sourceURL=/app/common/navigation.html
+
+    </script>
+</head>
+<body>
+<template root>
+    <div style="max-width: 600px; margin: auto">
+        <div style="padding: 1px;">
+            <h1 style="margin-left: 0">Common</h1>
+
+            <hr>
+
+            <a href="#/app/common/if.html">
+                <h2 class="header">Dom-If</h2>
+                <span>If implementation for HTML Elements</span>
+            </a>
+
+            <a href="#/app/common/repeat.html">
+                <h2 class="header">Dom-Repeat</h2>
+                <span>For loop for HTML Elements</span>
+            </a>
+
+            <a href="#/app/common/implicit.html">
+                <h2 class="header">Dom-Implicit</h2>
+                <span>Implicit Templating</span>
+            </a>
+
+        </div>
+    </div>
+</template>
+</body>
+</html>
+
+
+
+
+
+

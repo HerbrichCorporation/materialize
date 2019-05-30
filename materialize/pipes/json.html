@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/pipes.html" rel="component">
+    <script>
+
+        define((template) => {
+
+            let transform = (value, args) => {
+                return JSON.stringify(value);
+            };
+
+            customPipes.define("json", transform);
+        });
+
+        //# sourceURL=/materialize/pipes/json.html
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+
+

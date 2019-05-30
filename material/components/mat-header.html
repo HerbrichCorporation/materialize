@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <style>
+
+        mat-header {
+            display: block;
+        }
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class MatHeader extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+                }
+
+            }
+
+            customElements.define("mat-header", MatHeader);
+
+        });
+
+    </script>
+</head>
+<body>
+<template>
+    <div content style="display: flex;"></div>
+</template>
+</body>
+</html>
+
+
+

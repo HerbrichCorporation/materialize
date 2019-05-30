@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <link href="/materialize/services/router.html" rel="component">
+    <link href="/materialize/services/htmlClient.html" rel="component">
+    <link href="/material/components/mat-panel.html" rel="component">
+    <link href="/material/components/mat-table.html" rel="component">
+    <script>
+
+        define((template) => {
+
+            class AppUserControlUsers extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+                }
+
+                users(query, callback) {
+                    let htmlClient = customServices.get("htmlClient");
+                    let url = `service/usercontrol/user/table?index=${query.index}&limit=${query.limit}`;
+                    let promise = htmlClient.get(url);
+                    promise.then((data) => {
+                        callback(data.rows, data.size);
+                    });
+                };
+
+            }
+
+            materialize.define({
+                path: "usercontrol/users",
+                href: '/app/usercontrol/users.html',
+                name: 'main',
+                element: 'app-usercontrol-users',
+                component: AppUserControlUsers,
+                guard(activeRoute) {
+                    let htmlClient = customServices.get("htmlClient");
+                    return {
+                        root: htmlClient.get("service")
+                    };
+                }
+            })
+        });
+
+        //# sourceURL=/app/usercontrol/users.html
+
+    </script>
+</head>
+<body>
+<template root>
+    <mat-panel>
+        <table is="mat-table" [items]="users" item="user">
+            <colgroup>
+                <col [path]="'firstName'">
+                <col [path]="'lastName'">
+            </colgroup>
+            <thead>
+            <tr>
+                <td><strong>First Name</strong></td>
+                <td><strong>Last Name</strong></td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{user.firstName}}</td>
+                <td>{{user.lastName}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </mat-panel>
+</template>
+</body>
+</html>
+
+

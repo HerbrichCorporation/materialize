@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <script>
+
+        define(() => {
+
+            class MaterializeHTMLTableElement extends HTMLTableElement {
+
+                constructor(template) {
+                    super();
+                    this.template = template;
+                }
+
+                connectedCallback() {
+                    materialize.componentAttach(this);
+                }
+
+                disconnectedCallback() {
+                    materialize.componentDetach(this);
+                }
+
+            }
+
+            window.MaterializeHTMLTableElement = MaterializeHTMLTableElement
+        });
+
+        //# sourceURL=/materialize/extensions/HTMLTableElement.html
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>
+

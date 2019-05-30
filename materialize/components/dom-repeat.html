@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLTemplateElement.html" rel="component">
+    <script>
+
+        define((template) => {
+
+            class DomRepeatTemplate extends MaterializeHTMLTemplateElement {
+
+                constructor() {
+                    super();
+
+                    this.properties = {
+                        repeat: {
+                            element: this.getAttribute("item"),
+                            source: this.getAttribute("items")
+                        }
+                    };
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    this.inputBinding.push(
+                        function () {
+                            let context = materialize.context(this, this.properties.repeat.source);
+                            this.repeat = eval(context);
+                        }
+                    );
+
+                }
+
+                inputCallback(forward) {
+
+                    if (!forward) {
+
+                        for (let i = 0; i < this.repeat.length; i++) {
+
+                            let repeatElement = this.repeat[i];
+
+                            let children = Array.from(this.parentElement.children);
+
+                            let child = children[1 + i];
+
+                            if (child) {
+                                let childElement = child[this.properties.repeat.element];
+
+                                if (repeatElement === childElement) {
+                                    //materialize.inputBinding(repeatElement);
+                                } else {
+
+                                    let cloneNode = this
+                                        .content
+                                        .firstElementChild
+                                        .cloneNode(true);
+
+                                    cloneNode[this.properties.repeat.element] = this.repeat[i];
+
+                                    cloneNode.isExtension = true;
+
+                                    cloneNode.isRoot = true;
+
+                                    let node = this.parentElement.insertBefore(cloneNode, child);
+
+                                    child.remove();
+
+                                }
+                            } else {
+
+                                let cloneNode = this
+                                    .content
+                                    .firstElementChild
+                                    .cloneNode(true);
+
+                                cloneNode[this.properties.repeat.element] = this.repeat[i];
+
+                                cloneNode.isExtension = true;
+
+                                cloneNode.isRoot = true;
+
+                                let node = this.parentElement.appendChild(cloneNode);
+
+                            }
+
+                        }
+
+                        while (this.parentElement.children[this.repeat.length + 1] !== undefined) {
+                            this.parentElement.children[this.repeat.length + 1].remove();
+                        }
+
+                        for (let i = 1; i < this.parentElement.children.length; i++) {
+                            let child = this.parentElement.children[i];
+
+                            materialize.componentAttach(child);
+                        }
+                    }
+                }
+            }
+
+            customElements.define("dom-repeat", DomRepeatTemplate, {extends: "template"});
+
+        });
+
+        //# sourceURL=/materialize/components/dom-repeat.html
+
+    </script>
+</head>
+<body>
+
+</body>
+
+

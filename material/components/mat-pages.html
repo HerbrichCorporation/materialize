@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <style>
+        mat-pages {
+            display: block;
+        }
+    </style>
+    <script>
+
+        define((template) => {
+
+            class MatPages extends MaterializeHTMLElement {
+                constructor() {
+                    super(template);
+
+                    this.page = 0;
+                }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    let template = this.querySelector("template[contentchildren]");
+
+                    for (let contentChild of Array.from(this.contentChildren.content.children)) {
+                        contentChild.style.display = "none";
+                        this.appendChild(contentChild);
+                    }
+                }
+
+                inputCallback() {
+                    for (const contentChild of this.children) {
+                        contentChild.style.display = "none";
+                    }
+
+                    let child = Array.from(this.children)
+                        .find((child) => child.getAttribute("page") === this.page.toString());
+
+                    child.style.display = "block";
+                }
+            }
+
+            customElements.define("mat-pages", MatPages);
+
+        });
+
+        //# sourceURL=/material/components/mat-pages.html
+
+    </script>
+</head>
+<body>
+<template>
+</template>
+</body>
+</html>
+
+
+
+
