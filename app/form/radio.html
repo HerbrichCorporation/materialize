@@ -71,7 +71,7 @@
 
             materialize.define({
                 href: '/app/form/radio.html',
-                name: 'main',
+                name: '1',
                 element: 'app-radio',
                 component: AppRadio
             })
@@ -85,7 +85,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Radio</h1>
+            <h1 style="margin-left: 0;">Dom Radio</h1>
 
             <hr>
 
@@ -95,6 +95,14 @@
             This Radio is derived from the standard Check Box. Animation is missing in this Implementation. This
             Example we show that this Radio if altered will reflect in a Text when clicked.
             </p>
+
+            <h2>DOM-API</h2>
+            <table style="width: 100%">
+                <tr>
+                    <td>([selected])</td>
+                    <td>two-way</td>
+                </tr>
+            </table>
 
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>

@@ -6,7 +6,7 @@
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
     <style>
-        app-philosophy {
+        error-404 {
             display: block;
         }
     </style>
@@ -14,7 +14,7 @@
 
         define((template) => {
 
-            class AppPhilosophy extends MaterializeHTMLElement {
+            class Error404 extends MaterializeHTMLElement {
 
                 constructor() {
                     super(template);
@@ -23,16 +23,16 @@
             }
 
             materialize.define({
-                href: '/app/philosophy.html',
+                href: '/404.html',
                 name: '1',
-                element: 'app-philosophy',
-                component: AppPhilosophy
+                element: 'error-404',
+                component: Error404
             })
 
         });
 
 
-        //# sourceURL=/app/philosophy.html
+        //# sourceURL=/app/404.html
 
     </script>
 </head>
@@ -40,10 +40,10 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <div style="padding: 1px;">
-            <h1 style="margin-left: 0">Philosophy</h1>
+            <h1 style="margin-left: 0">Error</h1>
             <hr>
 
-            <h2 class="header">About Materialize</h2>
+            <h2 class="header">404 Not Found</h2>
             <span></span>
 
         </div>

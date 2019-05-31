@@ -206,37 +206,6 @@
 
                     processBuilder(element) {
 
-                        if (element.hasAttribute("implicitselect")) {
-                            let select = element.getAttribute("implicitselect");
-
-                            let contentElement = materialize.findContentElement(element);
-                            let contentTemplate = contentElement.contentChildren;
-                            for (let child of Array.from(contentTemplate.content.childNodes)) {
-                                if (child instanceof HTMLElement && child.localName === select) {
-                                    let cloneNode = child.cloneNode(true);
-                                    element.appendChild(cloneNode);
-                                    if (element.hasAttribute("implicitvalue")) {
-
-                                        Object.assign(cloneNode, {
-                                            properties: {
-                                                let: {
-                                                    value: child.getAttribute("let"),
-                                                    source: element.getAttribute("implicitvalue"),
-                                                }
-                                            },
-
-                                            inputBinding: [function () {
-                                                if (this.properties.let.source) {
-                                                    let context = materialize.context(this, this.properties.let.source);
-                                                    this[this.properties.let.value] = eval(context);
-                                                }
-                                            }]
-                                        });
-                                    }
-                                }
-                            }
-                        }
-
                         if (element.hasAttribute("name")) {
                             let name = element.getAttribute("name");
 
@@ -255,9 +224,20 @@
                             let contentTemplate = contentElement.contentChildren;
                             for (let child of Array.from(contentTemplate.content.childNodes)) {
                                 if (child.localName === select) {
-                                    element.appendChild(child);
                                     if (child instanceof HTMLElement) {
-                                        materialize.inputBinding(child);
+                                        let cloneNode = child.cloneNode(true);
+                                        element.appendChild(cloneNode);
+
+                                        if (element.hasAttribute("implicit")) {
+
+                                            Object.assign(cloneNode, {
+                                                inputBinding: [function () {
+                                                    let context = materialize.context(this, element.getAttribute("implicit"));
+                                                    this[child.getAttribute("let")] = eval(context);
+                                                }]
+                                            });
+                                        }
+                                        materialize.inputBinding(cloneNode);
                                     }
                                 }
                             }
@@ -267,9 +247,21 @@
                             let contentElement = materialize.findContentElement(element);
                             let contentTemplate = contentElement.contentChildren;
                             for (let child of Array.from(contentTemplate.content.childNodes)) {
-                                element.appendChild(child);
-                                if (child instanceof HTMLElement) {
-                                    materialize.inputBinding(child);
+                                if (element.hasAttribute("implicit") && child instanceof HTMLElement) {
+                                    let cloneNode = child.cloneNode(true);
+                                    element.appendChild(cloneNode);
+
+                                    Object.assign(cloneNode, {
+                                        inputBinding: [function () {
+                                            let context = materialize.context(this, element.getAttribute("implicit"));
+                                            this[child.getAttribute("let")] = eval(context);
+                                        }]
+                                    });
+                                    materialize.inputBinding(cloneNode);
+                                } else {
+                                    let cloneNode = child.cloneNode(true);
+                                    element.appendChild(cloneNode);
+                                    materialize.inputBinding(cloneNode);
                                 }
                             }
                         }
@@ -552,38 +544,34 @@
                         let functionCall = /(\w[\w\d\.\+\-]+)\(([\w\d\.\+\-\s,\$]+)?\)/;
                         let functionCallResult = functionCall.exec(expression);
                         if (functionCallResult) {
-                            let parameters;
                             if (functionCallResult[2]) {
-                                parameters = functionCallResult[2].split(",").map((param) => {
+                                functionCallResult[2].split(",").forEach((param) => {
                                     let paramTrimmed = param.trim();
-                                    if (paramTrimmed === "$event" || paramTrimmed === "true" || paramTrimmed === "false") {
-                                        return paramTrimmed;
+                                    if (!(paramTrimmed === "$event" || paramTrimmed === "true" || paramTrimmed === "false")) {
+                                        expression = expression.replace(paramTrimmed, () => "this" + materialize.searchDeep2(element, paramTrimmed, 0))
                                     }
-                                    return "this" + materialize.searchDeep2(element, paramTrimmed, 0)
-                                }).join(",");
-                            } else {
-                                parameters = "";
+                                });
                             }
-                            return "this.parentElement" + materialize.searchDeep2(element.parentElement, functionCallResult[1], 1) + "(" + parameters + ")"
+                            return expression.replace(functionCallResult[1], () => "this.parentElement" + materialize.searchDeep2(element.parentElement, functionCallResult[1], 1)
+                            )
                         }
 
                         let variableSet = /(\w[\w\d\.\+\-]+)\s*=\s*([\w\d\.\+\-'\$]+)/;
                         let variableSetResult = variableSet.exec(expression);
                         if (variableSetResult) {
-                            let partialResult = "this.parentElement" + materialize.searchDeep2(element.parentElement, variableSetResult[1], 1) + "=";
+                            expression = expression.replace(variableSetResult[1], () => "this.parentElement" + materialize.searchDeep2(element.parentElement, variableSetResult[1], 1));
                             let paramTrimmed = variableSetResult[2].trim();
                             if (paramTrimmed === "$event" || paramTrimmed === "true" || paramTrimmed === "false"
                                 || (paramTrimmed.startsWith("'") && paramTrimmed.endsWith("'"))) {
-                                return partialResult + paramTrimmed;
+                                return expression
                             }
-
-                            return partialResult + materialize.searchDeep2(element, paramTrimmed, 0);
+                            return expression.replace(paramTrimmed, () => materialize.searchDeep2(element, paramTrimmed, 0));
                         }
 
                         let variableRead = /(\w[\w\d\.\+\-]+)/;
                         let variableReadResult = variableRead.exec(expression);
                         if (variableReadResult) {
-                            return "this.parentElement" + materialize.searchDeep2(element.parentElement, variableReadResult[1], 1);
+                            return expression.replace(variableReadResult[1], () => "this.parentElement" + materialize.searchDeep2(element.parentElement, variableReadResult[1], 1));
                         }
                     }
 

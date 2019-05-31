@@ -12,6 +12,7 @@
     <link href="/material/components/mat-tab.html" rel="component">
     <link href="/material/components/mat-page.html" rel="component">
     <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/materialize/components/dom-if.html" rel="component">
     <link href="/materialize/components/dom-form.html" rel="component">
     <link href="/materialize/components/dom-input.html" rel="component">
     <link href="/materialize/components/dom-checkbox.html" rel="component">
@@ -65,7 +66,7 @@
 
             materialize.define({
                 href: '/app/common/if.html',
-                name: 'main',
+                name: '1',
                 element: 'app-common-if',
                 component: AppCommonIf
             })
@@ -79,7 +80,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">If</h1>
+            <h1 style="margin-left: 0;">Dom If</h1>
             <hr>
 
             <h2>Introduction</h2>
@@ -92,7 +93,7 @@
             <table style="width: 100%">
                 <tr>
                     <td>predicate</td>
-                    <td>one-way</td>
+                    <td>attribute</td>
                 </tr>
             </table>
 

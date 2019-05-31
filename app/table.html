@@ -46,6 +46,7 @@
                             {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
                             {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
                             {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
+                            {position: 21, name:'Michelle', weight: 21.47,symbol:'2E'}
                         ];
 
                         let materials = items.slice(query.index,query.index + query.limit)
@@ -55,11 +56,55 @@
                     }
 
                 }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    let code =
+`<table is="mat-table" [items]="materials" item="material">
+    <colgroup>
+        <col [path]="'position'">
+        <col [path]="'name'">
+        <col [path]="'Weight'">
+        <col [path]="'Symbol'">
+    </colgroup>
+    <thead>
+    <tr>
+        <td><strong>Number</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Weight</strong></td>
+        <td><strong>Symbol</strong></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{material.position}}</td>
+        <td>{{material.name}}</td>
+        <td>{{material.weight}}</td>
+        <td>{{material.symbol}}</td>
+    </tr>
+    </tbody>
+</table>
+`;
+
+                    let preElement = document.createElement("pre");
+                    preElement.className = "language-html";
+
+                    let codeElement = document.createElement("code");
+                    codeElement.className = "language-html";
+                    codeElement.innerHTML = Prism.highlight(code, Prism.languages.html, 'html');
+                    preElement.appendChild(codeElement);
+
+                    this.example.appendChild(preElement);
+
+                }
+
+
             }
 
             materialize.define({
                 href : '/app/table.html',
-                name: 'main',
+                name: '1',
                 element: 'app-table',
                 component: AppTable
             })

@@ -66,7 +66,7 @@
 
             materialize.define({
                 href: '/app/form/select.html',
-                name: 'main',
+                name: '1',
                 element: 'app-select',
                 component: AppSelect
             })
@@ -80,7 +80,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Select</h1>
+            <h1 style="margin-left: 0;">Dom Select</h1>
 
             <hr>
 
@@ -90,6 +90,15 @@
             This Select is derived from the standard Check Box. Animation is missing in this Implementation. This
             Example we show that this Select if altered will reflect in a Text when clicked.
             </p>
+
+            <h2>DOM-API</h2>
+            <table style="width: 100%">
+                <tr>
+                    <td>([selected])</td>
+                    <td>two-way</td>
+                </tr>
+            </table>
+
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
                 <mat-tab [label]="'Source'"></mat-tab>

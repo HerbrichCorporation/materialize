@@ -5,16 +5,22 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
+
     <style>
-        app-philosophy {
+        app-navigation-second {
             display: block;
         }
+
+        h2.header {
+            margin-bottom: 0;
+        }
+
     </style>
     <script>
 
         define((template) => {
 
-            class AppPhilosophy extends MaterializeHTMLElement {
+            class AppNavigationSecond extends MaterializeHTMLElement {
 
                 constructor() {
                     super(template);
@@ -23,30 +29,23 @@
             }
 
             materialize.define({
-                href: '/app/philosophy.html',
-                name: '1',
-                element: 'app-philosophy',
-                component: AppPhilosophy
+                href: '/app/navigation/second.html',
+                name: '2',
+                element: 'app-navigation-second',
+                component: AppNavigationSecond
             })
 
         });
 
 
-        //# sourceURL=/app/philosophy.html
+        //# sourceURL=/app/navigation/navigation.html
 
     </script>
 </head>
 <body>
 <template root>
     <div style="max-width: 600px; margin: auto">
-        <div style="padding: 1px;">
-            <h1 style="margin-left: 0">Philosophy</h1>
-            <hr>
-
-            <h2 class="header">About Materialize</h2>
-            <span></span>
-
-        </div>
+        It Works...
     </div>
 </template>
 </body>

@@ -15,6 +15,7 @@
     <link href="/materialize/components/dom-form.html" rel="component">
     <link href="/materialize/components/dom-input.html" rel="component">
     <link href="/materialize/components/dom-checkbox.html" rel="component">
+    <link href="/materialize/components/dom-repeat.html" rel="component">
     <style>
         app-common-example {
             display: block;
@@ -71,7 +72,7 @@
 <body>
 <template root>
     <template is="dom-repeat" items="materials" item="material">
-        <div implicitselect="div" implicitvalue="material"></div>
+        <div content implicit="material"></div>
     </template>
 </template>
 </body>

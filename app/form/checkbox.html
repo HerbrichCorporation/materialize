@@ -15,6 +15,7 @@
     <link href="/materialize/components/dom-form.html" rel="component">
     <link href="/materialize/components/dom-input.html" rel="component">
     <link href="/materialize/components/dom-checkbox.html" rel="component">
+    <link href="/materialize/components/dom-if.html" rel="component">
     <style>
         app-checkbox {
             display: block;
@@ -73,7 +74,7 @@
 
             materialize.define({
                 href: '/app/form/checkbox.html',
-                name: 'main',
+                name: '1',
                 element: 'app-checkbox',
                 component: AppCheckbox
             })
@@ -87,7 +88,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Check Box</h1>
+            <h1 style="margin-left: 0;">Dom Check Box</h1>
             <hr>
 
             <h2>Introduction</h2>

@@ -27,33 +27,42 @@
 
                     let hash = window.location.hash;
 
-                    let path = hash.substring(1, hash.length);
+                    let paths = hash.split("#");
 
-                    if (path.length > 0) {
+                    if (paths.length > 1) {
                         let router = customServices.get("router");
 
-                        let routerResult = router.find(path, name);
+                        let path = paths[Number(name)];
 
-                        routerResult
-                            .then((activeRoute) => {
-                                while (this.lastElementChild) {
-                                    this.lastElementChild.remove();
-                                }
+                        if (path) {
+                            let routerResult = router.find(path, name);
 
-                                let htmlElement = document.createElement(activeRoute.element);
-                                htmlElement[activeRoute.dataProperty] = activeRoute.data;
+                            if (routerResult) {
+                                routerResult
+                                    .then((activeRoute) => {
+                                        while (this.lastElementChild) {
+                                            this.lastElementChild.remove();
+                                        }
 
-                                this.appendChild(htmlElement);
+                                        let htmlElement = document.createElement(activeRoute.element);
+                                        htmlElement[activeRoute.dataProperty] = activeRoute.data;
 
-                                materialize.render(htmlElement);
+                                        this.appendChild(htmlElement);
 
-                                if (htmlElement.routerCallback) {
-                                    htmlElement.routerCallback();
-                                }
-                            })
-                            .catch((reason) => {
-                                console.log(reason);
-                            })
+                                        materialize.render(htmlElement);
+
+                                        if (htmlElement.routerCallback) {
+                                            htmlElement.routerCallback();
+                                        }
+                                    })
+                                    .catch((reason) => {
+                                        console.log(reason);
+                                    })
+                            } else {
+                                console.log("path not found: " + paths + " name " + name)
+                            }
+                        }
+
                     }
                 }
 

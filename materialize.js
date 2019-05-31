@@ -18,7 +18,7 @@ window.request = (imports) => {
 
             components.push(searchElement);
 
-            let imports = searchElement.querySelectorAll("link[rel=component], link[rel=view]");
+            let imports = searchElement.querySelectorAll("link[rel=component]");
 
             if (imports) {
                 request(imports);
@@ -58,7 +58,7 @@ window.request = (imports) => {
 
 };
 
-request(document.querySelectorAll("link[rel=component], link[rel=view]"));
+request(document.querySelectorAll("link[rel=component]"));
 
 window.componentProcessor = (component) => {
 

@@ -5,6 +5,7 @@
     <title>Title</title>
     <link href="/materialize/components/dom-if.html" rel="component">
     <link href="/materialize/components/dom-input.html" rel="component">
+    <link href="/materialize/components/dom-repeat.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
     <link href="/material/components/mat-input-container.html" rel="component">
     <link href="/material/components/mat-button.html" rel="component">
@@ -142,7 +143,7 @@
                 <div style="text-align: left;">
                     <template is="dom-repeat" items="elements" item="item">
                         <div (click)="onItemClicked($event, item)">
-                            <div implicitselect="mat-option" implicitvalue="item"></div>
+                            <div select="mat-option" implicit="item"></div>
                         </div>
                     </template>
                 </div>

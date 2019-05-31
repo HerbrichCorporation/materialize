@@ -34,11 +34,12 @@
                     this.page = 0;
                 }
 
+
                 connectedCallback() {
                     super.connectedCallback();
 
                     let code =
-                        `<app-common-example>
+`<app-common-example>
     <div let="material">
         <div>
             <span>{{material.position}}</span>
@@ -63,11 +64,12 @@
 
                 }
 
+
             }
 
             materialize.define({
                 href: '/app/common/implicit.html',
-                name: 'main',
+                name: '1',
                 element: 'app-common-implicit',
                 component: AppCommonImplicit
             })
@@ -81,7 +83,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Implicit</h1>
+            <h1 style="margin-left: 0;">Dom Implicit</h1>
             <hr>
 
             <h2>Introduction</h2>
@@ -92,11 +94,11 @@
             <h2>DOM-API</h2>
             <table style="width: 100%">
                 <tr>
-                    <td>implicitselect</td>
+                    <td>select</td>
                     <td>Attribute</td>
                 </tr>
                 <tr>
-                    <td>implicitvalue</td>
+                    <td>implicit</td>
                     <td>Attribute</td>
                 </tr>
                 <tr>

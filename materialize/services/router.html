@@ -61,6 +61,10 @@
 
                     });
 
+                    httpRequest.addEventListener("error", (event) => {
+                        document.location.hash = "/404.html";
+                    });
+
                     httpRequest.open("GET", currentHref, false);
                     httpRequest.send();
 
@@ -69,73 +73,72 @@
             }
 
             find(currentPath, currentName) {
-                if (currentPath.length > 0) {
+                if (currentPath && currentPath.length > 0) {
                     this.fire(currentPath);
-                }
 
-                for (let entry of this.registry) {
+                    for (let entry of this.registry) {
 
-                    if (entry.name === currentName) {
+                        if (entry.name === currentName) {
 
-                        let currentSegments = currentPath.split("/");
-                        let pathSegments = entry.href.split("/");
+                            let currentSegments = currentPath.split("/");
+                            let pathSegments = entry.href.split("/");
 
-                        let resultSegmentRegex = [];
-                        let resultSegmentValue = [];
+                            let resultSegmentRegex = [];
+                            let resultSegmentValue = [];
 
-                        for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
-                            let regex = pathSegments[i].replace(/\{\w+\}/, "\\\{(.*)\\\}");
-                            let result = new RegExp(regex).exec(pathSegments[i]);
+                            for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
+                                let regex = pathSegments[i].replace(/\{\w+\}/, "\\\{(.*)\\\}");
+                                let result = new RegExp(regex).exec(pathSegments[i]);
 
-                            if (result) {
-                                if (result.length === 1) {
-                                    if (result[0] === currentSegments[i]) {
-                                        resultSegmentRegex.push(result[0]);
+                                if (result) {
+                                    if (result.length === 1) {
+                                        if (result[0] === currentSegments[i]) {
+                                            resultSegmentRegex.push(result[0]);
+                                            resultSegmentValue.push(currentSegments[i]);
+                                        }
+                                    }
+
+                                    if (result.length === 2) {
+                                        resultSegmentRegex.push(result[1]);
                                         resultSegmentValue.push(currentSegments[i]);
                                     }
                                 }
+                            }
 
-                                if (result.length === 2) {
-                                    resultSegmentRegex.push(result[1]);
-                                    resultSegmentValue.push(currentSegments[i]);
+                            if (currentSegments.length === resultSegmentRegex.length) {
+                                this.activeRoute = {};
+                                for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
+                                    this.activeRoute[resultSegmentRegex[i]] = resultSegmentValue[i];
                                 }
-                            }
-                        }
+                                this.activeRoute.element = entry.element;
 
-                        if (currentSegments.length === resultSegmentRegex.length) {
-                            this.activeRoute = {};
-                            for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
-                                this.activeRoute[resultSegmentRegex[i]] = resultSegmentValue[i];
-                            }
-                            this.activeRoute.element = entry.element;
+                                let executor = (resolve, reject) => {
+                                    if (entry.guard) {
+                                        let guardObject = entry.guard(this.activeRoute);
 
-                            let executor = (resolve, reject) => {
-                                if (entry.guard) {
-                                    let guardObject = entry.guard(this.activeRoute);
-
-                                    for (let property of Object.getOwnPropertyNames(guardObject)) {
-                                        guardObject[property]
-                                            .then((value) => {
-                                                this.activeRoute.data = value;
-                                                this.activeRoute.dataProperty = property;
-                                                resolve(this.activeRoute)
-                                            })
-                                            .catch((reason) => {
-                                                reject(reason);
-                                            })
+                                        for (let property of Object.getOwnPropertyNames(guardObject)) {
+                                            guardObject[property]
+                                                .then((value) => {
+                                                    this.activeRoute.data = value;
+                                                    this.activeRoute.dataProperty = property;
+                                                    resolve(this.activeRoute)
+                                                })
+                                                .catch((reason) => {
+                                                    reject(reason);
+                                                })
+                                        }
+                                    } else {
+                                        resolve(this.activeRoute);
                                     }
-                                } else {
-                                    resolve(this.activeRoute);
-                                }
 
-                            };
+                                };
 
-                            return new Promise(executor);
+                                return new Promise(executor);
+                            }
                         }
+
                     }
-
                 }
-
             }
 
         }

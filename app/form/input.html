@@ -15,7 +15,7 @@
     <script>
         define((template) => {
 
-            class AppInput extends MaterializeHTMLElement {
+            class AppFormInput extends MaterializeHTMLElement {
 
                 constructor() {
                     super(template);
@@ -53,9 +53,9 @@
 
             materialize.define({
                 href: '/app/form/input.html',
-                name: 'main',
-                element: 'app-input',
-                component: AppInput
+                name: '1',
+                element: 'app-form-input',
+                component: AppFormInput
             })
         });
 
@@ -67,7 +67,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Input</h1>
+            <h1 style="margin-left: 0;">Dom Input</h1>
 
             <hr>
 
@@ -77,6 +77,14 @@
             This Input is derived from the standard Check Box. Animation is missing in this Implementation. This
             Example we show that this Input if altered will reflect in a Text when clicked.
             </p>
+
+            <h2>DOM-API</h2>
+            <table style="width: 100%">
+                <tr>
+                    <td>([value])</td>
+                    <td>two-way</td>
+                </tr>
+            </table>
 
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
