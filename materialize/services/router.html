@@ -61,11 +61,9 @@
 
                     });
 
-                    httpRequest.addEventListener("error", (event) => {
-                        document.location.hash = "/404.html";
-                    });
+                    let base = document.querySelector("base");
 
-                    httpRequest.open("GET", currentHref, false);
+                    httpRequest.open("GET", base + currentHref, false);
                     httpRequest.send();
 
                     this.files.reverse().forEach(componentProcessor);
