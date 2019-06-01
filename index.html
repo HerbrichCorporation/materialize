@@ -3,11 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <base url="/materialize">
+    <script>
+        // Opera 8.0+
+        var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
+
+        // Firefox 1.0+
+        var isFirefox = typeof InstallTrigger !== 'undefined';
+
+        // Safari 3.0+ "[object HTMLElementConstructor]"
+        var isSafari = /constructor/i.test(window.HTMLElement) || (function (p) { return p.toString() === "[object SafariRemoteNotification]"; })(!window['safari'] || (typeof safari !== 'undefined' && safari.pushNotification));
+
+        // Internet Explorer 6-11
+        var isIE = /*@cc_on!@*/false || !!document.documentMode;
+
+        // Edge 20+
+        var isEdge = !isIE && !!window.StyleMedia;
+
+        // Chrome 1 - 71
+        var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+
+        // Blink engine detection
+        var isBlink = (isChrome || isOpera) && !!window.CSS;
+
+        if (isOpera || isSafari || isIE || isEdge || isBlink) {
+            alert("Web Components are only ready for Firefox or Chrome")
+        }
+    </script>
     <link href="library/prism/prism.css" rel="stylesheet">
     <script src="library/prism/prism.js" data-manual></script>
-    <link href="material.css" rel="stylesheet">
-    <link href="app.html" rel="component">
-    <script src="bootstrap.js"></script>
+    <link href="material.css" rel="stylesheet"/>
+    <link href="/app.html" rel="component"/>
+    <link href="/materialize/components/dom-router.html" rel="component"/>
+    <script src="materialize.js"></script>
 </head>
 <body>
     <meld-app></meld-app>

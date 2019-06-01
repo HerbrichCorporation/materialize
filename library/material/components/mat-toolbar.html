@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <link href="/library/material/components/mat-buttons.html" rel="component">
+    <link href="/library/material/components/mat-header.html" rel="component">
+    <style>
+
+        mat-toolbar {
+            display: block;
+        }
+
+        mat-toolbar div.container {
+            display: flex;
+            background-color: var(--main-normal-color);
+            line-height: 32px;
+            padding: 8px;
+        }
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class MatToolbar extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+                }
+
+            }
+
+            customElements.define("mat-toolbar", MatToolbar);
+
+        });
+
+    </script>
+</head>
+<body>
+<template>
+    <div class="container">
+        <div select="mat-header" style="flex-grow: 1" ></div>
+        <div select="mat-buttons"></div>
+    </div>
+</template>
+</body>
+</html>
+
+
+
+
+

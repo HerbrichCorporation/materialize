@@ -5,16 +5,17 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
-    <link href="/material/components/mat-panel.html" rel="component">
-    <link href="/material/components/mat-checkbox-container.html" rel="component">
-    <link href="/material/components/mat-select-container.html" rel="component">
-    <link href="/material/components/mat-tabs.html" rel="component">
-    <link href="/material/components/mat-tab.html" rel="component">
-    <link href="/material/components/mat-page.html" rel="component">
-    <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-panel.html" rel="component">
+    <link href="/library/material/components/mat-checkbox-container.html" rel="component">
+    <link href="/library/material/components/mat-select-container.html" rel="component">
+    <link href="/library/material/components/mat-tabs.html" rel="component">
+    <link href="/library/material/components/mat-tab.html" rel="component">
+    <link href="/library/material/components/mat-page.html" rel="component">
+    <link href="/library/material/components/mat-pages.html" rel="component">
     <link href="/materialize/components/dom-form.html" rel="component">
     <link href="/materialize/components/dom-input.html" rel="component">
     <link href="/materialize/components/dom-checkbox.html" rel="component">
+    <link href="/materialize/components/dom-repeat.html" rel="component">
     <style>
         app-common-example {
             display: block;
@@ -71,7 +72,7 @@
 <body>
 <template root>
     <template is="dom-repeat" items="materials" item="material">
-        <div implicitselect="div" implicitvalue="material"></div>
+        <div content implicit="material"></div>
     </template>
 </template>
 </body>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/materialize/materialize.html" rel="component">
+    <link href="/materialize/extensions/HTMLElement.html" rel="component">
+
+    <style>
+        app-navigation-navigation {
+            display: block;
+        }
+
+        h2.header {
+            margin-bottom: 0;
+        }
+
+    </style>
+    <script>
+
+        define((template) => {
+
+            class AppNavigationNavigation extends MaterializeHTMLElement {
+
+                constructor() {
+                    super(template);
+                }
+
+            }
+
+            materialize.define({
+                href: '/app/navigation/navigation.html',
+                name: '1',
+                element: 'app-navigation-navigation',
+                component: AppNavigationNavigation
+            })
+
+        });
+
+
+        //# sourceURL=/app/navigation/navigation.html
+
+    </script>
+</head>
+<body>
+<template root>
+    <div style="max-width: 600px; margin: auto">
+        <div style="padding: 1px;">
+            <h1 style="margin-left: 0">Navigation</h1>
+
+            <hr>
+
+            <a href="#/app/navigation/drawer.html">
+                <h2 class="header">Material Drawer</h2>
+                <span>An Drawer Implementation without Animations</span>
+            </a>
+
+            <a href="#/app/navigation/router.html#/app/navigation/second.html">
+                <h2 class="header">Dom Router</h2>
+                <span>All about the Materialize Router</span>
+            </a>
+
+            <a href="#/app/navigation/tabs.html">
+                <h2 class="header">Material Tabs</h2>
+                <span>A Tabs implementation without Animations</span>
+            </a>
+
+        </div>
+    </div>
+</template>
+</body>
+</html>
+
+
+
+
+
+

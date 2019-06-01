@@ -7,11 +7,11 @@
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
     <link href="/materialize/services/router.html" rel="component">
     <link href="/materialize/services/htmlClient.html" rel="component">
-    <link href="/material/components/mat-tabs.html" rel="component">
-    <link href="/material/components/mat-tab.html" rel="component">
-    <link href="/material/components/mat-page.html" rel="component">
-    <link href="/material/components/mat-pages.html" rel="component">
-    <link href="/material/components/mat-table.html" rel="component">
+    <link href="/library/material/components/mat-tabs.html" rel="component">
+    <link href="/library/material/components/mat-tab.html" rel="component">
+    <link href="/library/material/components/mat-page.html" rel="component">
+    <link href="/library/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-table.html" rel="component">
     <script>
 
         define((template) => {
@@ -25,28 +25,7 @@
 
                     this.materials = (query, callback) => {
 
-                        let items = [
-                            {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-                            {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-                            {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-                            {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-                            {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-                            {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-                            {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-                            {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-                            {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-                            {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-                            {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-                            {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-                            {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-                            {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-                            {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-                            {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-                            {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-                            {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-                            {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-                            {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-                        ];
+                        let items = this.materialsArray;
 
                         let materials = items.slice(query.index,query.index + query.limit)
 
@@ -55,13 +34,66 @@
                     }
 
                 }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    let code =
+`<table is="mat-table" [items]="materials" item="material">
+    <colgroup>
+        <col [path]="'position'">
+        <col [path]="'name'">
+        <col [path]="'Weight'">
+        <col [path]="'Symbol'">
+    </colgroup>
+    <thead>
+    <tr>
+        <td><strong>Number</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Weight</strong></td>
+        <td><strong>Symbol</strong></td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>{{material.position}}</td>
+        <td>{{material.name}}</td>
+        <td>{{material.weight}}</td>
+        <td>{{material.symbol}}</td>
+    </tr>
+    </tbody>
+</table>
+`;
+
+                    let preElement = document.createElement("pre");
+                    preElement.className = "language-html";
+
+                    let codeElement = document.createElement("code");
+                    codeElement.className = "language-html";
+                    codeElement.innerHTML = Prism.highlight(code, Prism.languages.html, 'html');
+                    preElement.appendChild(codeElement);
+
+                    this.example.appendChild(preElement);
+
+                }
+
+
             }
 
             materialize.define({
                 href : '/app/table.html',
-                name: 'main',
+                name: '1',
                 element: 'app-table',
-                component: AppTable
+                component: AppTable,
+                guard(activeRoute) {
+                    let htmlClient = customServices.get("htmlClient");
+
+                    let app = htmlClient.get("app/common/materials.json");
+
+                    return {
+                        materialsArray : app
+                    }
+                }
             })
         });
 
@@ -83,7 +115,7 @@
 
         <mat-tabs (select)="page = $event">
             <mat-tab default [label]="'Example'"></mat-tab>
-            <mat-tab [label]="'Source'"></mat-tab>
+            <mat-tab [label]="'HTML'"></mat-tab>
         </mat-tabs>
 
         <mat-pages [page]="page">

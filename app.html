@@ -3,28 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/materialize/services.html" rel="component">
     <link href="/materialize/pipes/regex.html" rel="component">
     <link href="/materialize/pipes/json.html" rel="component">
 
-    <link href="/material/components/mat-toolbar.html" rel="component">
-    <link href="/material/components/mat-drawer-container.html" rel="component">
-    <link href="/material/components/mat-drawer-content.html" rel="component">
-    <link href="/material/components/mat-drawer.html" rel="component">
-    <link href="/material/components/mat-input-container.html" rel="component">
-    <link href="/material/components/mat-select.html" rel="component">
-    <link href="/material/components/mat-header.html" rel="component">
-    <link href="/material/components/mat-buttons.html" rel="component">
-
-    <link href="/materialize/components/dom-router.html" rel="component">
-    <link href="/materialize/components/dom-template.html" rel="component">
-    <link href="/materialize/components/dom-input.html" rel="component">
-    <link href="/materialize/components/dom-repeat.html" rel="component">
-    <link href="/materialize/components/dom-if.html" rel="component">
-
-    <link href="/materialize/directives/dom-style.html" rel="component">
-    <link href="/example.html" rel="component">
-
+    <link href="/library/material/components/mat-toolbar.html" rel="component">
+    <link href="/library/material/components/mat-header.html" rel="component">
+    <link href="/library/material/components/mat-buttons.html" rel="component">
+    <link href="/library/material/components/mat-button.html" rel="component">
     <style>
 
         h1 {
@@ -51,8 +36,20 @@
             text-decoration: none;
         }
 
+        a:link {
+            color: var(--main-font-color);
+        }
+
         a:visited {
-            color: inherit;
+            color: var(--main-font-color);
+        }
+
+        a:hover {
+            color: var(--main-font-color);
+        }
+
+        a:active {
+            color: var(--main-font-color);
         }
 
         .icon {
@@ -97,7 +94,7 @@
                 }
 
                 navBar() {
-                    this.open = !this.open;
+                    document.location = "#/app/navigation.html"
                 }
 
 
@@ -126,7 +123,7 @@
     <mat-toolbar>
         <mat-header style="color: white;">
             <a class="icon" href="#/app/navigation.html"
-                    style="display:inline; color: white; background-color : var(--main-normal-color);margin-right: 12px;">
+               style="display:inline; color: white; background-color : var(--main-normal-color);margin-right: 12px;">
                 menu
             </a>
             Materialize
@@ -138,7 +135,7 @@
         </mat-buttons>
     </mat-toolbar>
 
-    <dom-router name="main"></dom-router>
+    <dom-router name="1"></dom-router>
 
 </template>
 </body>

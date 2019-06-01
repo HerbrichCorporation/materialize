@@ -3,12 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <style>
+        mat-drawer-content {
+            display: inline-block;
+            width: 100%;
+        }
+    </style>
     <script>
 
         define((template) => {
-            class DomExample extends MaterializeHTMLElement {
+
+            class MatDrawerContent extends MaterializeHTMLElement {
 
                 constructor() {
                     super(template);
@@ -16,23 +22,21 @@
 
             }
 
-            customElements.define("dom-example", DomExample);
-        })
+            customElements.define("mat-drawer-content", MatDrawerContent);
 
-        //# sourceURL=example.html
+        });
+
+        //# sourceURL=/material/components/mat-drawer-content.html
 
 
     </script>
 </head>
 <body>
 <template>
-
-    <div>
-        <template name="test" implicit="value"></template>
-    </div>
-
+    <div content></div>
 </template>
 </body>
 </html>
+
 
 

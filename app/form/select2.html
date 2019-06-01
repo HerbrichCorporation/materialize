@@ -5,51 +5,59 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <link href="/materialize/services/htmlClient.html" rel="component">
     <link href="/library/material/components/mat-panel.html" rel="component">
-    <link href="/library/material/components/mat-checkbox-container.html" rel="component">
     <link href="/library/material/components/mat-select-container.html" rel="component">
     <link href="/library/material/components/mat-tabs.html" rel="component">
     <link href="/library/material/components/mat-tab.html" rel="component">
     <link href="/library/material/components/mat-page.html" rel="component">
     <link href="/library/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-select.html" rel="component">
+    <link href="/library/material/components/mat-option.html" rel="component">
     <link href="/materialize/components/dom-form.html" rel="component">
-    <link href="/materialize/components/dom-input.html" rel="component">
     <link href="/materialize/components/dom-checkbox.html" rel="component">
-    <link href="/app/common/example.html" rel="component">
-    <style>
-        app-common-implicit {
-            display: block;
-        }
-    </style>
-    <script>
 
+    <script>
         define((template) => {
 
-            class AppCommonImplicit extends MaterializeHTMLElement {
+            class AppSelect extends MaterializeHTMLElement {
 
                 constructor() {
                     super(template);
 
-                    this.selected = false;
+                    this.material = null;
                     this.page = 0;
-                }
 
+
+                    Object.assign(this, {
+                        model: Object.assign({}, {
+                            selected: true,
+                            page: 0
+                        })
+                    });
+
+                    this.materials = (query, callback) => {
+
+                        let items = this.materialsArray;
+
+                        let materials = items.slice(query.index, query.index + query.limit)
+
+                        callback(materials, items.length);
+
+                    }
+
+                }
 
                 connectedCallback() {
                     super.connectedCallback();
 
                     let code =
-`<app-common-example>
-    <div let="material">
-        <div>
-            <span>{{material.position}}</span>
-            <span>{{material.name}}</span>
-            <span>{{material.weight}}</span>
-            <span>{{material.symbol}}</span>
-            <br/>
-        </div>
-    </div>
-</app-common-example>
+`<mat-select [placeholder]="'Materials'"
+        label="item.name"
+        [items]="materials"
+        defaultValue="1">
+    <mat-option let="item" value="item.id">{{item.name}}</mat-option>
+</mat-select>
 `;
 
                     let preElement = document.createElement("pre");
@@ -68,23 +76,23 @@
             }
 
             materialize.define({
-                href: '/app/common/implicit.html',
+                href: '/app/form/select2.html',
                 name: '1',
-                element: 'app-common-implicit',
-                component: AppCommonImplicit,
+                element: 'app-select2',
+                component: AppSelect,
                 guard(activeRoute) {
                     let htmlClient = customServices.get("htmlClient");
 
                     let app = htmlClient.get("app/common/materials.json");
 
                     return {
-                        materials : app
+                        materialsArray: app
                     }
                 }
             })
         });
 
-        //# sourceURL=/app/common/implicit.html
+        //# sourceURL=/app/form/select.html
 
     </script>
 </head>
@@ -92,28 +100,26 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Dom Implicit</h1>
+            <h1 style="margin-left: 0;">Material Select</h1>
+
             <hr>
 
             <h2>Introduction</h2>
+
             <p>
-                A Implicit Templating for HTML. There are 2 keywords, one is select and the other is content. Select
-                selects an HTML Element with the localName and content simply inserts the content Children.
+                This Select is derived from the standard Check Box. Animation is missing in this Implementation. This
+                Example we show that this Select if altered will reflect in a Text when clicked.
             </p>
 
             <h2>DOM-API</h2>
             <table style="width: 100%">
                 <tr>
-                    <td>select</td>
-                    <td>Attribute</td>
+                    <td>([selected])</td>
+                    <td>two-way</td>
                 </tr>
                 <tr>
-                    <td>implicit</td>
-                    <td>Attribute</td>
-                </tr>
-                <tr>
-                    <td>let</td>
-                    <td>Attribute</td>
+                    <td>[items]</td>
+                    <td>one-way</td>
                 </tr>
             </table>
 
@@ -124,19 +130,13 @@
 
             <mat-pages [page]="page">
                 <mat-page page="0">
-                    <div style="margin: 20px;">
-                        <app-common-example>
-                            <div let="material2">
-                                <div>
-                                    <span>{{material2.position}}</span>
-                                    <span>{{material2.name}}</span>
-                                    <span>{{material2.weight}}</span>
-                                    <span>{{material2.symbol}}</span>
-                                    <br/>
-                                </div>
-                            </div>
-                        </app-common-example>
-                    </div>
+                    <mat-select [placeholder]="'Items per Page'"
+                                label="item.name"
+                                style="margin: 20px;"
+                                [items]="materials"
+                                defaultValue="1">
+                        <mat-option let="item" value="item.id">{{item.name}}</mat-option>
+                    </mat-select>
                 </mat-page>
                 <mat-page page="1">
                     <div style="overflow: visible; width: 100%;">
@@ -145,14 +145,9 @@
                     </div>
                 </mat-page>
             </mat-pages>
+
         </form>
     </div>
 </template>
 </body>
 </html>
-
-
-
-
-
-

@@ -27,33 +27,46 @@
 
                     let hash = window.location.hash;
 
-                    let path = hash.substring(1, hash.length);
+                    let paths = hash.split("#");
 
-                    if (path.length > 0) {
+                    if (paths.length > 1) {
                         let router = customServices.get("router");
 
-                        let routerResult = router.find(path, name);
+                        let path = paths[Number(name)];
 
-                        routerResult
-                            .then((activeRoute) => {
-                                while (this.lastElementChild) {
-                                    this.lastElementChild.remove();
-                                }
+                        if (path) {
+                            let pathRegex = /([\w\d\./]+)(\?[\w\d\./&]*)?/;
 
-                                let htmlElement = document.createElement(activeRoute.element);
-                                htmlElement[activeRoute.dataProperty] = activeRoute.data;
+                            let clearPath = pathRegex.exec(path);
 
-                                this.appendChild(htmlElement);
+                            let routerResult = router.find(clearPath[1], name);
 
-                                materialize.render(htmlElement);
+                            if (routerResult) {
+                                routerResult
+                                    .then((activeRoute) => {
+                                        while (this.lastElementChild) {
+                                            this.lastElementChild.remove();
+                                        }
 
-                                if (htmlElement.routerCallback) {
-                                    htmlElement.routerCallback();
-                                }
-                            })
-                            .catch((reason) => {
-                                console.log(reason);
-                            })
+                                        let htmlElement = document.createElement(activeRoute.element);
+                                        htmlElement[activeRoute.dataProperty] = activeRoute.data;
+
+                                        this.appendChild(htmlElement);
+
+                                        materialize.render(htmlElement);
+
+                                        if (htmlElement.routerCallback) {
+                                            htmlElement.routerCallback();
+                                        }
+                                    })
+                                    .catch((reason) => {
+                                        console.log(reason);
+                                    })
+                            } else {
+                                console.log("path not found: " + paths + " name " + name)
+                            }
+                        }
+
                     }
                 }
 

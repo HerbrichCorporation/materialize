@@ -5,12 +5,12 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
-    <link href="/material/components/mat-panel.html" rel="component">
-    <link href="/material/components/mat-select-container.html" rel="component">
-    <link href="/material/components/mat-tabs.html" rel="component">
-    <link href="/material/components/mat-tab.html" rel="component">
-    <link href="/material/components/mat-page.html" rel="component">
-    <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-panel.html" rel="component">
+    <link href="/library/material/components/mat-select-container.html" rel="component">
+    <link href="/library/material/components/mat-tabs.html" rel="component">
+    <link href="/library/material/components/mat-tab.html" rel="component">
+    <link href="/library/material/components/mat-page.html" rel="component">
+    <link href="/library/material/components/mat-pages.html" rel="component">
     <link href="/materialize/components/dom-form.html" rel="component">
     <link href="/materialize/components/dom-select.html" rel="component">
     <link href="/materialize/components/dom-checkbox.html" rel="component">
@@ -66,7 +66,7 @@
 
             materialize.define({
                 href: '/app/form/select.html',
-                name: 'main',
+                name: '1',
                 element: 'app-select',
                 component: AppSelect
             })
@@ -80,7 +80,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Select</h1>
+            <h1 style="margin-left: 0;">Dom Select</h1>
 
             <hr>
 
@@ -90,9 +90,18 @@
             This Select is derived from the standard Check Box. Animation is missing in this Implementation. This
             Example we show that this Select if altered will reflect in a Text when clicked.
             </p>
+
+            <h2>DOM-API</h2>
+            <table style="width: 100%">
+                <tr>
+                    <td>([selected])</td>
+                    <td>two-way</td>
+                </tr>
+            </table>
+
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
+                <mat-tab [label]="'HTML'"></mat-tab>
             </mat-tabs>
 
             <mat-pages [page]="page">

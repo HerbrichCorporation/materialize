@@ -5,34 +5,36 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
+    <style>
+        mat-page {
+            display: block;
+        }
+    </style>
     <script>
 
         define((template) => {
-            class DomExample extends MaterializeHTMLElement {
 
+            class MatPage extends MaterializeHTMLElement {
                 constructor() {
                     super(template);
                 }
-
             }
 
-            customElements.define("dom-example", DomExample);
-        })
+            customElements.define("mat-page", MatPage);
 
-        //# sourceURL=example.html
+        });
 
+        //# sourceURL=/material/components/mat-page.html
 
     </script>
 </head>
 <body>
 <template>
-
-    <div>
-        <template name="test" implicit="value"></template>
-    </div>
-
+    <div content></div>
 </template>
 </body>
 </html>
+
+
 
 

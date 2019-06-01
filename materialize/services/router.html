@@ -3,148 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="/materialize/services.html" rel="component">
+    <script>
+
+        define(() => {
+
+            class Router {
+
+                constructor() {
+                    this.registry = [];
+                    this.activeRoute = {};
+                }
+
+                loader(links, files) {
+                    this.links = links;
+                    this.files = files;
+                }
+
+                define(options) {
+                    this.registry.push(options);
+                }
+
+                fire(currentHref) {
+
+                    let link = document.createElement("link");
+                    link.href = currentHref;
+
+                    if (this.links.has(link.href)) {
+
+                    } else {
+                        let httpRequest = new XMLHttpRequest();
+
+                        httpRequest.addEventListener("load", (event) => {
+
+                            switch (event.target.status) {
+                                case 200 : {
+                                    let response = event.target.responseText;
+                                    let component = parser.parseFromString(response, "text/html");
+
+                                    let imports = component.querySelectorAll("link[rel=component]");
+
+                                    files.set(link.href, component);
+                                    links.set(link.href, link);
+
+                                    components.push(component);
+
+                                    if (imports) {
+                                        request(imports);
+                                    }
+                                } break;
+
+                                case 404 : {
+                                    document.location.hash = "/404.html";
+                                } break;
+                            }
+                        });
+
+                    let base = document.querySelector("base");
+
+                    httpRequest.open("GET", base.getAttribute("url") + currentHref, false);
+                    httpRequest.send();
+
+                        this.files.reverse().forEach(componentProcessor);
+                    }
+                }
+
+                find(currentPath, currentName) {
+                    if (currentPath && currentPath.length > 0) {
+                        this.fire(currentPath);
+
+                        for (let entry of this.registry) {
+
+                            if (entry.name === currentName) {
+
+                                let currentSegments = currentPath.split("/");
+                                let pathSegments = entry.href.split("/");
+
+                                let resultSegmentRegex = [];
+                                let resultSegmentValue = [];
+
+                                for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
+                                    let regex = pathSegments[i].replace(/\{\w+\}/, "\\\{(.*)\\\}");
+                                    let result = new RegExp(regex).exec(pathSegments[i]);
+
+                                    if (result) {
+                                        if (result.length === 1) {
+                                            if (result[0] === currentSegments[i]) {
+                                                resultSegmentRegex.push(result[0]);
+                                                resultSegmentValue.push(currentSegments[i]);
+                                            }
+                                        }
+
+                                        if (result.length === 2) {
+                                            resultSegmentRegex.push(result[1]);
+                                            resultSegmentValue.push(currentSegments[i]);
+                                        }
+                                    }
+                                }
+
+                                if (currentSegments.length === resultSegmentRegex.length) {
+                                    this.activeRoute = {};
+                                    for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
+                                        this.activeRoute[resultSegmentRegex[i]] = resultSegmentValue[i];
+                                    }
+                                    this.activeRoute.element = entry.element;
+
+                                    let executor = (resolve, reject) => {
+                                        if (entry.guard) {
+                                            let guardObject = entry.guard(this.activeRoute);
+
+                                            for (let property of Object.getOwnPropertyNames(guardObject)) {
+                                                guardObject[property]
+                                                    .then((value) => {
+                                                        this.activeRoute.data = value;
+                                                        this.activeRoute.dataProperty = property;
+                                                        resolve(this.activeRoute)
+                                                    })
+                                                    .catch((reason) => {
+                                                        reject(reason);
+                                                    })
+                                            }
+                                        } else {
+                                            resolve(this.activeRoute);
+                                        }
+
+                                    };
+
+                                    return new Promise(executor);
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+            customServices.define("router", Router);
+        })
+
+
+        //# sourceURL=/materialize/services/router.html
+
+
+    </script>
 </head>
 <body>
-
 </body>
 </html>
 
-<!DOCTYPE html>
 
-<link href="/materialize/services.html" rel="component">
-
-<script>
-
-    define(() => {
-
-        class Router {
-
-            constructor() {
-                this.registry = [];
-                this.activeRoute = {};
-            }
-
-            loader(links, files) {
-                this.links = links;
-                this.files = files;
-            }
-
-            define(options) {
-                this.registry.push(options);
-            }
-
-            fire(currentHref) {
-
-                let link = document.createElement("link");
-                link.href = currentHref;
-
-                if (this.links.has(link.href)) {
-
-                } else {
-                    let httpRequest = new XMLHttpRequest();
-
-                    httpRequest.addEventListener("load", (event) => {
-
-                        let response = event.target.responseText;
-                        let component = parser.parseFromString(response, "text/html");
-
-                        let imports = component.querySelectorAll("link[rel=component]");
-
-                        files.set(link.href, component);
-                        links.set(link.href, link);
-
-                        components.push(component);
-
-                        if (imports) {
-                            request(imports);
-                        }
-
-                    });
-
-                    httpRequest.open("GET", currentHref, false);
-                    httpRequest.send();
-
-                    this.files.reverse().forEach(componentProcessor);
-                }
-            }
-
-            find(currentPath, currentName) {
-                if (currentPath.length > 0) {
-                    this.fire(currentPath);
-                }
-
-                for (let entry of this.registry) {
-
-                    if (entry.name === currentName) {
-
-                        let currentSegments = currentPath.split("/");
-                        let pathSegments = entry.href.split("/");
-
-                        let resultSegmentRegex = [];
-                        let resultSegmentValue = [];
-
-                        for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
-                            let regex = pathSegments[i].replace(/\{\w+\}/, "\\\{(.*)\\\}");
-                            let result = new RegExp(regex).exec(pathSegments[i]);
-
-                            if (result) {
-                                if (result.length === 1) {
-                                    if (result[0] === currentSegments[i]) {
-                                        resultSegmentRegex.push(result[0]);
-                                        resultSegmentValue.push(currentSegments[i]);
-                                    }
-                                }
-
-                                if (result.length === 2) {
-                                    resultSegmentRegex.push(result[1]);
-                                    resultSegmentValue.push(currentSegments[i]);
-                                }
-                            }
-                        }
-
-                        if (currentSegments.length === resultSegmentRegex.length) {
-                            this.activeRoute = {};
-                            for (let i = 0; i < currentSegments.length && i < pathSegments.length; i++) {
-                                this.activeRoute[resultSegmentRegex[i]] = resultSegmentValue[i];
-                            }
-                            this.activeRoute.element = entry.element;
-
-                            let executor = (resolve, reject) => {
-                                if (entry.guard) {
-                                    let guardObject = entry.guard(this.activeRoute);
-
-                                    for (let property of Object.getOwnPropertyNames(guardObject)) {
-                                        guardObject[property]
-                                            .then((value) => {
-                                                this.activeRoute.data = value;
-                                                this.activeRoute.dataProperty = property;
-                                                resolve(this.activeRoute)
-                                            })
-                                            .catch((reason) => {
-                                                reject(reason);
-                                            })
-                                    }
-                                } else {
-                                    resolve(this.activeRoute);
-                                }
-
-                            };
-
-                            return new Promise(executor);
-                        }
-                    }
-
-                }
-
-            }
-
-        }
-
-        customServices.define("router", Router);
-    })
-
-
-    //# sourceURL=/materialize/services/router.html
-
-
-</script>

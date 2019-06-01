@@ -5,20 +5,15 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
-    <link href="/materialize/services/router.html" rel="component">
     <link href="/materialize/services/htmlClient.html" rel="component">
-    <link href="/material/components/mat-panel.html" rel="component">
-    <link href="/material/components/mat-select.html" rel="component">
-    <link href="/material/components/mat-option.html" rel="component">
-    <link href="/material/components/mat-radio-container.html" rel="component">
-    <link href="/material/components/mat-select-container.html" rel="component">
-    <link href="/material/components/mat-tab.html" rel="component">
-    <link href="/material/components/mat-tabs.html" rel="component">
-    <link href="/material/components/mat-page.html" rel="component">
-    <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-tab.html" rel="component">
+    <link href="/library/material/components/mat-tabs.html" rel="component">
+    <link href="/library/material/components/mat-page.html" rel="component">
+    <link href="/library/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-input-container.html" rel="component">
     <link href="/materialize/components/dom-form.html" rel="component">
-    <link href="/materialize/components/dom-repeat.html" rel="component">
     <link href="/materialize/components/dom-if.html" rel="component">
+    <link href="/materialize/components/dom-input.html" rel="component">
     <script>
 
         define((template) => {
@@ -37,11 +32,53 @@
                         password: 'asd'
                     };
                 }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    let code =
+`<form #form is="dom-form">
+
+    <mat-input-container [placeholder]="'First Name'">
+        <input is="dom-input" type="text" name="firstName" ([value])="user.firstName">
+    </mat-input-container>
+
+    <mat-input-container [placeholder]="'Last Name'">
+        <input is="dom-input" type="text" name="lastName" ([value])="user.lastName">
+    </mat-input-container>
+
+    <mat-input-container [placeholder]="'Birthday'">
+        <input is="dom-input" type="date" name="birthday" ([value])="user.birthday">
+    </mat-input-container>
+
+    <mat-input-container [placeholder]="'Password'">
+        <input is="dom-input" type="password" name="password" ([value])="user.password">
+    </mat-input-container>
+
+    <button is="mat-button" (click)="send()" type="button">Send</button>
+
+    <template is="dom-if" predicate="form.dirty">
+        <div>Dirty</div>
+    </template>
+</form>`;
+
+                    let preElement = document.createElement("pre");
+                    preElement.className = "language-html";
+
+                    let codeElement = document.createElement("code");
+                    codeElement.className = "language-html";
+                    codeElement.innerHTML = Prism.highlight(code, Prism.languages.html, 'html');
+                    preElement.appendChild(codeElement);
+
+                    this.example.appendChild(preElement);
+
+                }
+
             }
 
             materialize.define({
                 href: '/app/form/form.html',
-                name: 'main',
+                name: '1',
                 element: 'app-form',
                 component: AppForm,
                 guard(activeRoute) {
@@ -60,19 +97,22 @@
 <body>
 <template root>
     <div style="margin: auto; max-width: 600px;">
-        <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0">Form</h1>
+        <h1 style="margin-left: 0">Dom Form</h1>
 
-            <hr/>
+        <hr/>
 
-            <mat-tabs (select)="page = $event">
-                <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
-            </mat-tabs>
+        <p>A derived Form for validating all Fields in the Formular</p>
 
-            <mat-pages [page]="page">
-                <mat-page page="0">
-                    <div style="padding: 20px;">
+        <mat-tabs (select)="page = $event">
+            <mat-tab default [label]="'Example'"></mat-tab>
+            <mat-tab [label]="'HTML'"></mat-tab>
+        </mat-tabs>
+
+        <mat-pages [page]="page">
+            <mat-page page="0">
+                <div style="padding: 20px;">
+                    <form #form is="dom-form" style="padding: 1px;">
+
                         <mat-input-container [placeholder]="'First Name'">
                             <input is="dom-input" type="text" name="firstName" ([value])="user.firstName">
                         </mat-input-container>
@@ -94,16 +134,16 @@
                         <template is="dom-if" predicate="form.dirty">
                             <div>Dirty</div>
                         </template>
+                    </form>
+                </div>
+            </mat-page>
+            <mat-page page="1">
+                <div style="overflow: visible; width: 100%;">
+                    <div #example>
                     </div>
-                </mat-page>
-                <mat-page page="1">
-                    <div style="overflow: visible; width: 100%;">
-                        <div #example>
-                        </div>
-                    </div>
-                </mat-page>
-            </mat-pages>
-        </form>
+                </div>
+            </mat-page>
+        </mat-pages>
     </div>
 </template>
 </body>

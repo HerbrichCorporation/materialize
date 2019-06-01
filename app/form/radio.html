@@ -5,12 +5,12 @@
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component">
     <link href="/materialize/extensions/HTMLElement.html" rel="component">
-    <link href="/material/components/mat-panel.html" rel="component">
-    <link href="/material/components/mat-radio-container.html" rel="component">
-    <link href="/material/components/mat-tabs.html" rel="component">
-    <link href="/material/components/mat-tab.html" rel="component">
-    <link href="/material/components/mat-page.html" rel="component">
-    <link href="/material/components/mat-pages.html" rel="component">
+    <link href="/library/material/components/mat-panel.html" rel="component">
+    <link href="/library/material/components/mat-radio-container.html" rel="component">
+    <link href="/library/material/components/mat-tabs.html" rel="component">
+    <link href="/library/material/components/mat-tab.html" rel="component">
+    <link href="/library/material/components/mat-page.html" rel="component">
+    <link href="/library/material/components/mat-pages.html" rel="component">
     <link href="/materialize/components/dom-form.html" rel="component">
     <link href="/materialize/components/dom-radio.html" rel="component">
     <script>
@@ -71,7 +71,7 @@
 
             materialize.define({
                 href: '/app/form/radio.html',
-                name: 'main',
+                name: '1',
                 element: 'app-radio',
                 component: AppRadio
             })
@@ -85,7 +85,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Radio</h1>
+            <h1 style="margin-left: 0;">Dom Radio</h1>
 
             <hr>
 
@@ -96,9 +96,17 @@
             Example we show that this Radio if altered will reflect in a Text when clicked.
             </p>
 
+            <h2>DOM-API</h2>
+            <table style="width: 100%">
+                <tr>
+                    <td>([selected])</td>
+                    <td>two-way</td>
+                </tr>
+            </table>
+
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
+                <mat-tab [label]="'HTML'"></mat-tab>
             </mat-tabs>
 
             <mat-pages [page]="page">

@@ -1,17 +1,17 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
     <title>Title</title>
     <link href="/materialize/materialize.html" rel="component"/>
     <link href="/materialize/extensions/HTMLElement.html" rel="component"/>
-    <link href="/material/components/mat-panel.html" rel="component"/>
-    <link href="/material/components/mat-checkbox-container.html" rel="component"/>
-    <link href="/material/components/mat-select-container.html" rel="component"/>
-    <link href="/material/components/mat-tabs.html" rel="component"/>
-    <link href="/material/components/mat-tab.html" rel="component"/>
-    <link href="/material/components/mat-page.html" rel="component"/>
-    <link href="/material/components/mat-pages.html" rel="component"/>
+    <link href="/library/material/components/mat-panel.html" rel="component"/>
+    <link href="/library/material/components/mat-checkbox-container.html" rel="component"/>
+    <link href="/library/material/components/mat-select-container.html" rel="component"/>
+    <link href="/library/material/components/mat-tabs.html" rel="component"/>
+    <link href="/library/material/components/mat-tab.html" rel="component"/>
+    <link href="/library/material/components/mat-page.html" rel="component"/>
+    <link href="/library/material/components/mat-pages.html" rel="component"/>
     <link href="/materialize/components/dom-form.html" rel="component"/>
     <link href="/materialize/components/dom-input.html" rel="component"/>
     <link href="/materialize/components/dom-checkbox.html" rel="component"/>
@@ -73,7 +73,7 @@
 
             materialize.define({
                 href: '/app/form/checkbox.html',
-                name: 'main',
+                name: '1',
                 element: 'app-checkbox',
                 component: AppCheckbox
             })
@@ -87,7 +87,7 @@
 <template root>
     <div style="max-width: 600px; margin: auto">
         <form #form is="dom-form" style="padding: 1px;">
-            <h1 style="margin-left: 0;">Check Box</h1>
+            <h1 style="margin-left: 0;">Dom Check Box</h1>
             <hr>
 
             <h2>Introduction</h2>
@@ -107,7 +107,7 @@
 
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
+                <mat-tab [label]="'HTML'"></mat-tab>
             </mat-tabs>
 
             <mat-pages [page]="page">
