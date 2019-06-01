@@ -3,6 +3,8 @@ let links = new Map();
 let components = [];
 let parser = new DOMParser();
 
+let base = document.querySelector("base");
+
 window.request = (imports) => {
 
     for (let link of imports) {
@@ -46,7 +48,13 @@ window.request = (imports) => {
 
             });
 
-            httpRequest.open("GET", link.href, false);
+            let href = link.href;
+
+            let hrefRegex = /(http:\/\/.+:\d+)(.+)/;
+            let hrefResult = hrefRegex.exec(href);
+            let url = hrefResult[1] + base.getAttribute("url") + hrefResult[2];
+
+            httpRequest.open("GET", url, false);
             httpRequest.send();
 
         }

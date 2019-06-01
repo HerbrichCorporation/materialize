@@ -59,8 +59,10 @@
                             }
                         });
 
-                        httpRequest.open("GET", currentHref, false);
-                        httpRequest.send();
+                    let base = document.querySelector("base");
+
+                    httpRequest.open("GET", base.getAttribute("url") + currentHref, false);
+                    httpRequest.send();
 
                         this.files.reverse().forEach(componentProcessor);
                     }
