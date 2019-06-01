@@ -88,7 +88,8 @@
 
             <h2>Introduction</h2>
             <p>
-                A Implicit Templating for HTML
+                A Implicit Templating for HTML. There are 2 keywords, one is select and the other is content. Select
+                selects an HTML Element with the localName and content simply inserts the content Children.
             </p>
 
             <h2>DOM-API</h2>
@@ -109,7 +110,7 @@
 
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
+                <mat-tab [label]="'HTML'"></mat-tab>
             </mat-tabs>
 
             <mat-pages [page]="page">

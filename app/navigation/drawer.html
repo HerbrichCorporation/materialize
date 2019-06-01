@@ -14,7 +14,6 @@
     <link href="/material/components/mat-pages.html" rel="component">
 
 
-
     <style>
         app-navigation-drawer {
             display: block;
@@ -50,8 +49,36 @@
                 }
 
                 toggle() {
-                    this.open = ! this.open;
+                    this.open = !this.open;
                 }
+
+                connectedCallback() {
+                    super.connectedCallback();
+
+                    let code =
+                        `<mat-drawer-container>
+    <mat-drawer [open]="open">
+        <p><a href="#/app/table.html">Table</a></p>
+        <p><a href="#/app/form/form.html">Form</a></p>
+        <p><a href="#/app/form/checkbox.html">Check Box</a></p>
+    </mat-drawer>
+    <mat-drawer-content>
+        <p>It work's</p>
+    </mat-drawer-content>
+</mat-drawer-container>`;
+
+                    let preElement = document.createElement("pre");
+                    preElement.className = "language-html";
+
+                    let codeElement = document.createElement("code");
+                    codeElement.className = "language-html";
+                    codeElement.innerHTML = Prism.highlight(code, Prism.languages.html, 'html');
+                    preElement.appendChild(codeElement);
+
+                    this.example.appendChild(preElement);
+
+                }
+
 
             }
 
@@ -82,18 +109,22 @@
             </h1>
 
             <hr>
+            <h2>Introduction</h2>
+            <p>
+                The Material Drawer is for side navigation and works perfectly with responsive UI Design.
+            </p>
 
             <h2>DOM-API</h2>
             <table style="width: 100%">
                 <tr>
-                    <td>name</td>
-                    <td>attribute</td>
+                    <td>[open]</td>
+                    <td>one-way</td>
                 </tr>
             </table>
 
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
+                <mat-tab [label]="'HTML'"></mat-tab>
             </mat-tabs>
 
             <mat-pages [page]="page">

@@ -35,7 +35,11 @@
                         let path = paths[Number(name)];
 
                         if (path) {
-                            let routerResult = router.find(path, name);
+                            let pathRegex = /([\w\d\./]+)(\?[\w\d\./&]*)?/;
+
+                            let clearPath = pathRegex.exec(path);
+
+                            let routerResult = router.find(clearPath[1], name);
 
                             if (routerResult) {
                                 routerResult

@@ -86,7 +86,8 @@
             <h2>Introduction</h2>
             <p>
                 A Dom-If for displaying only HTML in an If Statement. Better than display:none because it is really
-                rendered with an If Statement
+                rendered with an If Statement. This checkbox comes with an mat-checkbox-container to display the
+                placeholder like material design.
             </p>
 
             <h2>DOM-API</h2>
@@ -99,7 +100,7 @@
 
             <mat-tabs (select)="page = $event">
                 <mat-tab default [label]="'Example'"></mat-tab>
-                <mat-tab [label]="'Source'"></mat-tab>
+                <mat-tab [label]="'HTML'"></mat-tab>
             </mat-tabs>
 
             <mat-pages [page]="page">

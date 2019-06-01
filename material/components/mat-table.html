@@ -1,13 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8">
     <title>Title</title>
-    <link href="/materialize/extensions/HTMLTableElement.html" rel="component"/>
-    <link href="/material/components/mat-button.html" rel="component"/>
-    <link href="/material/components/mat-option.html" rel="component"/>
-    <link href="/material/components/mat-select.html" rel="component"/>
-    <meta name="robots" content="noindex, follow" />
+    <link href="/materialize/extensions/HTMLTableElement.html" rel="component">
+    <link href="/material/components/mat-button.html" rel="component">
+    <link href="/material/components/mat-option.html" rel="component">
+    <link href="/material/components/mat-select.html" rel="component">
     <style>
         table[is=mat-table] {
             width: 100%;
@@ -74,7 +73,6 @@
                             `<mat-select [placeholder]="'Items per Page'"
                                          label="item.value"
                                          (click)="setLimit($event)"
-                                         style="flex: 1"
                                          [items]="itemsPerPage"
                                          defaultValue="1">
                                    <mat-option let="item" value="item.id">{{item.value}}</mat-option>
@@ -85,6 +83,7 @@
                         let container = materialize.create("<div style='display: flex'></div>");
                         td.append(container);
 
+                        container.appendChild(materialize.create("<div style='flex: 1'></div>"));
                         container.appendChild(matSelect);
                         let counter = materialize.create("<span style='margin-left: 10px; line-height: 42px; color: var(--main-darkgrey-color)'>{{index}} - {{index + limit}} of {{size}}</span>");
                         container.appendChild(counter);
