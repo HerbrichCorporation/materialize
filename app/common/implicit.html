@@ -71,7 +71,16 @@
                 href: '/app/common/implicit.html',
                 name: '1',
                 element: 'app-common-implicit',
-                component: AppCommonImplicit
+                component: AppCommonImplicit,
+                guard(activeRoute) {
+                    let htmlClient = customServices.get("htmlClient");
+
+                    let app = htmlClient.get("app/common/materials.json");
+
+                    return {
+                        materials : app
+                    }
+                }
             })
         });
 
