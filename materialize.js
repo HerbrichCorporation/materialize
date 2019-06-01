@@ -50,7 +50,7 @@ window.request = (imports) => {
 
             let href = link.href;
 
-            let hrefRegex = /(http:\/\/.+:\d+)(.+)/;
+            let hrefRegex = /(http:\/\/[^\/]+(?:\d+)?)(\/.+)/;
             let hrefResult = hrefRegex.exec(href);
             let url = hrefResult[1] + base.getAttribute("url") + hrefResult[2];
 
